@@ -11,7 +11,7 @@ meta:
   estimated_duration: 6.5h
   estimated_effort: 8.5h
   started_at: 2026-03-26
-  completed_at: null
+  completed_at: 2026-03-26
   writer: executing-plans-orchestrator
 
 tasks:
@@ -42,7 +42,7 @@ tasks:
     depends_on: [T1]
     duration_pert: {o: 1.0, m: 2.0, p: 4.0}
     effort_pert: {o: 1.5, m: 2.5, p: 5.0}
-    status: review
+    status: done
     active_agent_time: null
     elapsed_active_time: null
     owner: codex
@@ -69,7 +69,7 @@ tasks:
     depends_on: [T1]
     duration_pert: {o: 1.0, m: 2.0, p: 3.0}
     effort_pert: {o: 1.5, m: 2.5, p: 4.0}
-    status: review
+    status: done
     active_agent_time: null
     elapsed_active_time: null
     owner: codex
@@ -93,7 +93,7 @@ tasks:
     depends_on: [T2, T3]
     duration_pert: {o: 0.5, m: 1.0, p: 2.0}
     effort_pert: {o: 0.75, m: 1.5, p: 3.0}
-    status: review
+    status: done
     active_agent_time: null
     elapsed_active_time: null
     owner: codex
@@ -123,7 +123,7 @@ tasks:
     depends_on: [T2, T3, T4]
     duration_pert: {o: 0.5, m: 1.0, p: 2.0}
     effort_pert: {o: 0.75, m: 1.5, p: 2.5}
-    status: blocked
+    status: done
     active_agent_time: null
     elapsed_active_time: null
     owner: codex
@@ -138,16 +138,14 @@ tasks:
         - git status --short
         - rg -n "superpowers" .
         - git diff --stat
-      evidence: []
+      evidence:
+        - origin pushed successfully to lenchante17/graphenepowers
+        - local branch now tracks origin/main over SSH
     artifacts: []
     review_state: none
-    blocker_ids: [B1]
+    blocker_ids: []
 
-blockers:
-  - id: B1
-    kind: remote_access
-    summary: Target origin could not be verified non-interactively.
-    detail: GitHub requested credentials for lenchante17/graphenepowers during ls-remote, so push readiness is still unconfirmed.
+blockers: []
 
 events:
   - task_id: T1
@@ -165,19 +163,25 @@ events:
   - task_id: T5
     kind: blocker_opened
     note: Remote origin was configured, but GitHub auth blocked non-interactive verification.
+  - task_id: T5
+    kind: blocker_resolved
+    note: SSH authentication succeeded and the target repository was created.
+  - task_id: T5
+    kind: task_completed
+    note: Local commit fed3bf6 was pushed to origin/main and tracking was configured.
 ```
 
 ## Human View Summary
 | ID | Task | Depends On | Duration E +/- sigma | Effort E +/- sigma | Status | Review | Owner |
 |----|------|------------|----------------------|--------------------|--------|--------|-------|
 | T1 | Audit upstream public surface | - | 0.54h +/- 0.16h | 0.54h +/- 0.16h | done | none | codex |
-| T2 | Rebrand docs and installation entry points | T1 | 2.17h +/- 0.50h | 2.75h +/- 0.58h | review | none | codex |
-| T3 | Curate the skill tree | T1 | 2.00h +/- 0.33h | 2.58h +/- 0.42h | review | none | codex |
-| T4 | Update platform integration metadata | T2, T3 | 1.08h +/- 0.25h | 1.63h +/- 0.38h | review | none | codex |
-| T5 | Verify and prepare remote handoff | T2, T3, T4 | 1.08h +/- 0.25h | 1.54h +/- 0.29h | blocked | none | codex |
+| T2 | Rebrand docs and installation entry points | T1 | 2.17h +/- 0.50h | 2.75h +/- 0.58h | done | none | codex |
+| T3 | Curate the skill tree | T1 | 2.00h +/- 0.33h | 2.58h +/- 0.42h | done | none | codex |
+| T4 | Update platform integration metadata | T2, T3 | 1.08h +/- 0.25h | 1.63h +/- 0.38h | done | none | codex |
+| T5 | Verify and prepare remote handoff | T2, T3, T4 | 1.08h +/- 0.25h | 1.54h +/- 0.29h | done | none | codex |
 
 ## Human View Kanban
-### Review
+### Done
 - `T2 Rebrand docs and installation entry points`
   - owner: `codex`
   - acceptance: GraphenePowers branding and install names replace superpowers in the public docs
@@ -187,9 +191,6 @@ events:
 - `T4 Update platform integration metadata`
   - owner: `codex`
   - acceptance: plugin and command metadata point at graphenepowers
-
-### Blocked
 - `T5 Verify and prepare remote handoff`
   - owner: `codex`
   - acceptance: stale public superpowers references are reviewed and the remote state is reported
-  - blocker: `B1 target origin requires credentials or fork confirmation`
