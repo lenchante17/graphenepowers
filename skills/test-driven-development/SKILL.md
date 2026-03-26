@@ -354,6 +354,21 @@ Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix 
 
 Never fix bugs without a test.
 
+## Execution Integration
+
+`graphenepowers:executing-plans` should invoke this skill for any task that writes production code.
+
+The RED/GREEN trail must be attached to the task card, not left in a free-form report:
+- failing and passing test commands belong in task `verification.commands`
+- proof of those runs belongs in task `verification.evidence`
+- test files, logs, and generated fixtures belong in task `artifacts`
+- a task without attached TDD evidence must not move to `review`
+
+No RED/GREEN evidence means `verify` should fail:
+- no watched failing test -> not ready
+- no watched passing test -> not ready
+- implementer report without command evidence -> not ready
+
 ## Testing Anti-Patterns
 
 When adding mocks or test utilities, read @testing-anti-patterns.md to avoid common pitfalls:

@@ -1,52 +1,33 @@
-# Superpowers for OpenCode
+# GraphenePowers for OpenCode
 
-Complete guide for using Superpowers with [OpenCode.ai](https://opencode.ai).
+Complete guide for using GraphenePowers with [OpenCode.ai](https://opencode.ai).
 
 ## Installation
 
-Add superpowers to the `plugin` array in your `opencode.json` (global or project-level):
+Add GraphenePowers to the `plugin` array in your `opencode.json`:
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git"]
+  "plugin": ["graphenepowers@git+https://github.com/lenchante17/graphenepowers.git"]
 }
 ```
 
-Restart OpenCode. The plugin auto-installs via Bun and registers all skills automatically.
-
-Verify by asking: "Tell me about your superpowers"
-
-### Migrating from the old symlink-based install
-
-If you previously installed superpowers using `git clone` and symlinks, remove the old setup:
-
-```bash
-# Remove old symlinks
-rm -f ~/.config/opencode/plugins/superpowers.js
-rm -rf ~/.config/opencode/skills/superpowers
-
-# Optionally remove the cloned repo
-rm -rf ~/.config/opencode/superpowers
-
-# Remove skills.paths from opencode.json if you added one for superpowers
-```
-
-Then follow the installation steps above.
+Restart OpenCode. The plugin installs from git and registers the GraphenePowers skill tree automatically.
 
 ## Usage
 
 ### Finding Skills
 
-Use OpenCode's native `skill` tool to list all available skills:
+Use OpenCode's native `skill` tool to list available skills:
 
-```
+```text
 use skill tool to list skills
 ```
 
 ### Loading a Skill
 
-```
-use skill tool to load superpowers/brainstorming
+```text
+use skill tool to load graphenepowers/brainstorming
 ```
 
 ### Personal Skills
@@ -72,19 +53,19 @@ description: Use when [condition] - [what it does]
 
 ### Project Skills
 
-Create project-specific skills in `.opencode/skills/` within your project.
+Create project-specific skills in `.opencode/skills/` inside a repo.
 
-**Skill Priority:** Project skills > Personal skills > Superpowers skills
+**Skill Priority:** project skills > personal skills > GraphenePowers skills
 
 ## Updating
 
-Superpowers updates automatically when you restart OpenCode. The plugin is re-installed from the git repository on each launch.
+OpenCode reinstalls the plugin from git when it restarts.
 
-To pin a specific version, use a branch or tag:
+To pin a specific revision:
 
 ```json
 {
-  "plugin": ["superpowers@git+https://github.com/obra/superpowers.git#v5.0.3"]
+  "plugin": ["graphenepowers@git+https://github.com/lenchante17/graphenepowers.git#main"]
 }
 ```
 
@@ -92,39 +73,33 @@ To pin a specific version, use a branch or tag:
 
 The plugin does two things:
 
-1. **Injects bootstrap context** via the `experimental.chat.system.transform` hook, adding superpowers awareness to every conversation.
-2. **Registers the skills directory** via the `config` hook, so OpenCode discovers all superpowers skills without symlinks or manual config.
+1. injects GraphenePowers bootstrap context into each conversation
+2. registers the repository's `skills/` directory so OpenCode can discover the public skill set
 
 ### Tool Mapping
 
-Skills written for Claude Code are automatically adapted for OpenCode:
+When skills reference Claude Code tools, OpenCode should adapt them as follows:
 
-- `TodoWrite` → `todowrite`
-- `Task` with subagents → OpenCode's `@mention` system
-- `Skill` tool → OpenCode's native `skill` tool
-- File operations → Native OpenCode tools
+- `TodoWrite` -> `todowrite`
+- `Task` with subagents -> OpenCode `@mention` workflows
+- `Skill` tool -> OpenCode's `skill` tool
+- file operations -> native OpenCode tools
 
 ## Troubleshooting
 
 ### Plugin not loading
 
-1. Check OpenCode logs: `opencode run --print-logs "hello" 2>&1 | grep -i superpowers`
-2. Verify the plugin line in your `opencode.json` is correct
-3. Make sure you're running a recent version of OpenCode
+1. Check logs: `opencode run --print-logs "hello" 2>&1 | grep -i graphenepowers`
+2. Verify the plugin line in your `opencode.json`
+3. Make sure OpenCode is up to date
 
 ### Skills not found
 
-1. Use OpenCode's `skill` tool to list available skills
-2. Check that the plugin is loading (see above)
-3. Each skill needs a `SKILL.md` file with valid YAML frontmatter
+1. Use the `skill` tool to list discovered skills
+2. Check that the plugin is loading
+3. Confirm the repository still contains valid `SKILL.md` files
 
-### Bootstrap not appearing
+## See Also
 
-1. Check OpenCode version supports `experimental.chat.system.transform` hook
-2. Restart OpenCode after config changes
-
-## Getting Help
-
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
-- OpenCode docs: https://opencode.ai/docs/
+- [`README.md`](../README.md)
+- [`skills/using-graphenepowers/SKILL.md`](../skills/using-graphenepowers/SKILL.md)

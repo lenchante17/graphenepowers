@@ -1,152 +1,270 @@
 ---
 name: writing-plans
-description: Use when you have a spec or requirements for a multi-step task, before touching code
+description: Use when approved requirements need to become a dependency-aware execution plan and initial progress record before implementation begins, especially when ordering, parallelism, estimates, or re-planning matter
 ---
 
 # Writing Plans
 
 ## Overview
 
-Write comprehensive implementation plans assuming the engineer has zero context for our codebase and questionable taste. Document everything they need to know: which files to touch for each task, code, testing, docs they might need to check, how to test it. Give them the whole plan as bite-sized tasks. DRY. YAGNI. TDD. Frequent commits.
+Turn approved requirements into an execution graph. A plan is not a checklist with feelings; it is the dependency model that execution will follow.
 
-Assume they are a skilled developer, but know almost nothing about our toolset or problem domain. Assume they don't know good test design very well.
+**Core principle:** Bad sequencing and vague verification create rework before code does.
 
-**Announce at start:** "I'm using the writing-plans skill to create the implementation plan."
+**Announce at start:** "I'm using the writing-plans skill to create the execution plan."
 
-**Context:** This should be run in a dedicated worktree (created by brainstorming skill).
+**Default outputs:**
+- Plan doc: `docs/graphenepowers/plans/YYYY-MM-DD-<topic>.md`
+- Progress record: `docs/graphenepowers/plans/YYYY-MM-DD-<topic>-plan-progress.md`
 
-**Save plans to:** `docs/superpowers/plans/YYYY-MM-DD-<feature-name>.md`
-- (User preferences for plan location override this default)
+## Required Inputs
 
-## Scope Check
+- Approved requirements or spec
+- `triage` result
+- Current project structure
 
-If the spec covers multiple independent subsystems, it should have been broken into sub-project specs during brainstorming. If it wasn't, suggest breaking this into separate plans — one per subsystem. Each plan should produce working, testable software on its own.
+If `triage` says `Feature` and no approved design exists, stop and use `graphenepowers:brainstorming`.
 
-## File Structure
+## The Process
 
-Before defining tasks, map out which files will be created or modified and what each one is responsible for. This is where decomposition decisions get locked in.
+### Step 1: Map the work as a graph
 
-- Design units with clear boundaries and well-defined interfaces. Each file should have one clear responsibility.
-- You reason best about code you can hold in context at once, and your edits are more reliable when files are focused. Prefer smaller, focused files over large ones that do too much.
-- Files that change together should live together. Split by responsibility, not by technical layer.
-- In existing codebases, follow established patterns. If the codebase uses large files, don't unilaterally restructure - but if a file you're modifying has grown unwieldy, including a split in the plan is reasonable.
+Before writing tasks, identify:
 
-This structure informs the task decomposition. Each task should produce self-contained changes that make sense independently.
+- change units
+- dependencies between units
+- expected write sets
+- verification per unit
 
-## Bite-Sized Task Granularity
+Each task node becomes both a DAG node and the future kanban card source. Each task must have:
+- stable task id (`T1`, `T2`, ...)
+- `depends_on`
+- initial status seed (`ready` if dependencies are already satisfied, otherwise `backlog`)
+- `owner`
+- write set or owned files/modules
+- acceptance criteria
+- verification command
+- expected artifacts
+- both `duration` and `effort` estimates
 
-**Each step is one action (2-5 minutes):**
-- "Write the failing test" - step
-- "Run it to make sure it fails" - step
-- "Implement the minimal code to make the test pass" - step
-- "Run the tests and make sure they pass" - step
-- "Commit" - step
+### Step 2: Estimate twice
 
-## Plan Document Header
+Every task gets two PERT triplets:
 
-**Every plan MUST start with this header:**
+- `duration_pert`: elapsed time for scheduling
+- `effort_pert`: total agent work for capacity/cost
 
-```markdown
-# [Feature Name] Implementation Plan
+Do not reuse one estimate for both.
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
+### Step 3: Identify the critical path
 
-**Goal:** [One sentence describing what this builds]
+- Compute the dependency path that controls elapsed time
+- Mark early parallelizable work
+- Pull blockers and interface risks as early as practical
 
-**Architecture:** [2-3 sentences about approach]
+For `Feature`, detail the near-term critical path and risky edges first. Leave later work coarser if it will be refined by rolling re-plan.
 
-**Tech Stack:** [Key technologies/libraries]
+### Step 4: Write the plan document
 
----
-```
-
-## Task Structure
+Every plan should start with:
 
 ````markdown
-### Task N: [Component Name]
+# [Topic] Execution Plan
 
-**Files:**
-- Create: `exact/path/to/file.py`
-- Modify: `exact/path/to/existing.py:123-145`
-- Test: `tests/exact/path/to/test.py`
+**Goal:** [One sentence]
 
-- [ ] **Step 1: Write the failing test**
+**Inputs:** [spec path or requirements source]
 
-```python
-def test_specific_behavior():
-    result = function(input)
-    assert result == expected
-```
+**Grade:** [Task | Feature]
 
-- [ ] **Step 2: Run test to verify it fails**
+**Execution Skill:** `graphenepowers:executing-plans`
 
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: FAIL with "function not defined"
+**Progress Record:** `docs/graphenepowers/plans/YYYY-MM-DD-<topic>-plan-progress.md`
 
-- [ ] **Step 3: Write minimal implementation**
-
-```python
-def function(input):
-    return expected
-```
-
-- [ ] **Step 4: Run test to verify it passes**
-
-Run: `pytest tests/path/test.py::test_name -v`
-Expected: PASS
-
-- [ ] **Step 5: Commit**
-
-```bash
-git add tests/path/test.py src/path/file.py
-git commit -m "feat: add specific feature"
-```
+---
 ````
 
-## No Placeholders
+Use task sections like this:
 
-Every step must contain the actual content an engineer needs. These are **plan failures** — never write them:
-- "TBD", "TODO", "implement later", "fill in details"
-- "Add appropriate error handling" / "add validation" / "handle edge cases"
-- "Write tests for the above" (without actual test code)
-- "Similar to Task N" (repeat the code — the engineer may be reading tasks out of order)
-- Steps that describe what to do without showing how (code blocks required for code steps)
-- References to types, functions, or methods not defined in any task
+````markdown
+### Task T1: [Name]
 
-## Remember
-- Exact file paths always
-- Complete code in every step — if a step changes code, show the code
-- Exact commands with expected output
-- DRY, YAGNI, TDD, frequent commits
+**Depends on:** `-`
+**Write Set:** `src/foo.ts`, `tests/foo.test.ts`
+**Duration PERT:** `0.5 / 1 / 2h`
+**Effort PERT:** `0.5 / 1.5 / 2.5h`
+**Verification:** `npm test -- foo`
 
-## Self-Review
+- [ ] Step 1: Write the failing test
+- [ ] Step 2: Run it and confirm correct failure
+- [ ] Step 3: Implement minimal code
+- [ ] Step 4: Run verification and confirm pass
+````
 
-After writing the complete plan, look at the spec with fresh eyes and check the plan against it. This is a checklist you run yourself — not a subagent dispatch.
+### Step 5: Seed `plan-progress.md`
 
-**1. Spec coverage:** Skim each section/requirement in the spec. Can you point to a task that implements it? List any gaps.
+Create the initial machine record and human view. Seed it with:
 
-**2. Placeholder scan:** Search your plan for red flags — any of the patterns from the "No Placeholders" section above. Fix them.
+- `plan_version`
+- `grade`
+- `confidence`
+- `profile_asymmetry`
+- `critical_path`
+- `estimated_duration`
+- `estimated_effort`
+- initial task list with `duration_pert` and `effort_pert`
+- task `status`
+- task `owner`
+- task `write_set`
+- task `acceptance`
+- task `verification`
+- task `artifacts`
+- task `review_state`
+- task `blocker_ids`
+- empty `blockers`
+- empty `events`
 
-**3. Type consistency:** Do the types, method signatures, and property names you used in later tasks match what you defined in earlier tasks? A function called `clearLayers()` in Task 3 but `clearFullLayers()` in Task 7 is a bug.
+`plan-progress.md` is the state record for `graphenepowers:executing-plans`, not a second plan written from scratch.
+The Markdown summary and kanban are rendered views, not handwritten status boards.
 
-If you find issues, fix them inline. No need to re-review — just fix and move on. If you find a spec requirement with no task, add the task.
+At minimum, seed it in this shape:
 
-## Execution Handoff
+````markdown
+# plan-progress.md
 
-After saving the plan, offer execution choice:
+## Machine Record
+```yaml
+meta:
+  plan_version: 1
+  grade: Task
+  confidence: medium
+  profile_asymmetry: 0.40
+  critical_path: [T1, T3]
+  estimated_duration: 2.5h
+  estimated_effort: 3.5h
+  started_at: null
+  completed_at: null
+  writer: executing-plans-orchestrator
 
-**"Plan complete and saved to `docs/superpowers/plans/<filename>.md`. Two execution options:**
+tasks:
+  - id: T1
+    name: Example task
+    depends_on: []
+    duration_pert: {o: 0.5, m: 1.0, p: 2.0}
+    effort_pert: {o: 0.5, m: 1.5, p: 2.5}
+    status: ready
+    active_agent_time: null
+    elapsed_active_time: null
+    owner: unassigned
+    write_set:
+      - src/example.ts
+      - tests/example.test.ts
+    acceptance:
+      - behavior matches the approved requirement
+    verification:
+      commands:
+        - npm test -- example
+      evidence: []
+    artifacts: []
+    review_state: none
+    blocker_ids: []
 
-**1. Subagent-Driven (recommended)** - I dispatch a fresh subagent per task, review between tasks, fast iteration
+blockers: []
+events: []
+```
 
-**2. Inline Execution** - Execute tasks in this session using executing-plans, batch execution with checkpoints
+## Human View Summary
+| ID | Task | Depends On | Duration E ± σ | Effort E ± σ | Status | Review | Owner |
+|----|------|------------|----------------|--------------|--------|--------|-------|
 
-**Which approach?"**
+## Human View Kanban
+### Ready
+- `T1 Example task`
+  - owner: `unassigned`
+  - acceptance: behavior matches the approved requirement
+````
 
-**If Subagent-Driven chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:subagent-driven-development
-- Fresh subagent per task + two-stage review
+If the machine record is missing these fields, execution will drift and re-planning becomes inconsistent.
 
-**If Inline Execution chosen:**
-- **REQUIRED SUB-SKILL:** Use superpowers:executing-plans
-- Batch execution with checkpoints for review
+### Step 6: Review before execution
+
+If this is `Feature`, or if `triage` used a hard override, run `graphenepowers:code-review` in `Preflight Spec Review` mode before execution.
+
+If preflight review fails:
+- fix the plan
+- re-run preflight review
+- do not start implementation yet
+
+### Step 7: Hand off to execution
+
+After saving both files:
+
+- hand off to `graphenepowers:executing-plans`
+- mention whether rolling re-plan is expected
+- mention any low-confidence tasks explicitly
+
+## Rolling Re-Plan Rules
+
+Re-plan only when one of these is true:
+
+1. a critical-path predecessor completed
+2. a blocker changed the structure of follow-up work
+3. re-triage indicates a possible grade increase
+
+When re-planning:
+
+- re-run `graphenepowers:triage` for affected follow-up work
+- raise a human gate if grade rises
+- raise a human gate if `confidence = low`
+- increment `plan_version`
+- mark the previous plan slice as superseded instead of creating a new unrelated record
+- move replaced cards to `superseded` instead of deleting them
+
+## Thrash Prevention
+
+- Do not re-plan the same task set twice in a row without new evidence
+- Prefer updating the critical path and directly dependent tasks first
+- If only task order changes slightly, log an event instead of incrementing `plan_version`
+
+## Quick Reference
+
+| Need | Plan requirement |
+|------|------------------|
+| Parallel work | disjoint write sets and explicit dependencies |
+| Accurate schedule | `duration_pert` |
+| Accurate effort tracking | `effort_pert` |
+| Re-plan later | coarse late tasks, detailed critical path |
+| Readable handoff | `acceptance`, `artifacts`, `review_state` |
+| Safe execution | concrete verification per task |
+
+## Common Mistakes
+
+**Linear checklist instead of graph**
+- **Problem:** hidden dependencies surface mid-execution
+- **Fix:** define `depends_on` explicitly
+
+**One estimate pretending to be two**
+- **Problem:** effort and duration get mixed in review and gating
+- **Fix:** write separate PERT triplets
+
+**Detailing all future tasks equally**
+- **Problem:** wasted planning on work that will change later
+- **Fix:** fully specify near critical path, leave late work coarse for rolling re-plan
+
+**Plan without verification**
+- **Problem:** execution can claim success without evidence
+- **Fix:** every task gets a concrete verification command
+
+**Treating kanban as a second source of truth**
+- **Problem:** task status drifts between YAML and Markdown
+- **Fix:** seed kanban-friendly task fields in YAML and render the Markdown view from them
+
+## Integration
+
+**Comes after:**
+- `graphenepowers:triage`
+- `graphenepowers:brainstorming` for `Feature`
+
+**Hands off to:**
+- `graphenepowers:code-review` in preflight mode when needed
+- `graphenepowers:executing-plans`

@@ -1,7 +1,8 @@
 .worktrees/
 .private-journal/
 .claude/
+.graphenepowers/
 .DS_Store
 node_modules/
 inspo
-triage/
+/triage/

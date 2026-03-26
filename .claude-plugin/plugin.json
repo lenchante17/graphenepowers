@@ -1,20 +1,19 @@
 {
-  "name": "superpowers",
-  "description": "Core skills library for Claude Code: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "5.0.6",
+  "name": "graphenepowers",
+  "description": "GraphenePowers v4 workflow for Claude Code: triage, planning, execution, review, and retrospective",
+  "version": "0.1.0",
   "author": {
-    "name": "Jesse Vincent",
-    "email": "jesse@fsck.com"
+    "name": "lenchante17"
   },
-  "homepage": "https://github.com/obra/superpowers",
-  "repository": "https://github.com/obra/superpowers",
+  "homepage": "https://github.com/lenchante17/graphenepowers",
+  "repository": "https://github.com/lenchante17/graphenepowers",
   "license": "MIT",
   "keywords": [
     "skills",
+    "workflow",
+    "planning",
     "tdd",
     "debugging",
-    "collaboration",
-    "best-practices",
-    "workflows"
+    "review"
   ]
 }

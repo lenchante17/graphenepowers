@@ -1,13 +1,13 @@
-# Superpowers for Codex
+# GraphenePowers for Codex
 
-Guide for using Superpowers with OpenAI Codex via native skill discovery.
+Guide for using GraphenePowers with OpenAI Codex through native skill discovery.
 
 ## Quick Install
 
 Tell Codex:
 
-```
-Fetch and follow instructions from https://raw.githubusercontent.com/obra/superpowers/refs/heads/main/.codex/INSTALL.md
+```text
+Fetch and follow instructions from https://raw.githubusercontent.com/lenchante17/graphenepowers/refs/heads/main/.codex/INSTALL.md
 ```
 
 ## Manual Installation
@@ -19,50 +19,45 @@ Fetch and follow instructions from https://raw.githubusercontent.com/obra/superp
 
 ### Steps
 
-1. Clone the repo:
+1. Clone the repository:
    ```bash
-   git clone https://github.com/obra/superpowers.git ~/.codex/superpowers
+   git clone https://github.com/lenchante17/graphenepowers.git ~/.codex/graphenepowers
    ```
 
 2. Create the skills symlink:
    ```bash
    mkdir -p ~/.agents/skills
-   ln -s ~/.codex/superpowers/skills ~/.agents/skills/superpowers
+   ln -s ~/.codex/graphenepowers/skills ~/.agents/skills/graphenepowers
    ```
 
 3. Restart Codex.
 
-4. **For subagent skills** (optional): Skills like `dispatching-parallel-agents` and `subagent-driven-development` require Codex's multi-agent feature. Add to your Codex config:
-   ```toml
-   [features]
-   multi_agent = true
-   ```
-
 ### Windows
 
-Use a junction instead of a symlink (works without Developer Mode):
+Use a junction instead of a symlink:
 
 ```powershell
 New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.agents\skills"
-cmd /c mklink /J "$env:USERPROFILE\.agents\skills\superpowers" "$env:USERPROFILE\.codex\superpowers\skills"
+cmd /c mklink /J "$env:USERPROFILE\.agents\skills\graphenepowers" "$env:USERPROFILE\.codex\graphenepowers\skills"
 ```
 
 ## How It Works
 
-Codex has native skill discovery — it scans `~/.agents/skills/` at startup, parses SKILL.md frontmatter, and loads skills on demand. Superpowers skills are made visible through a single symlink:
+Codex scans `~/.agents/skills/` at startup and loads skills on demand. GraphenePowers becomes visible through a single symlink:
 
-```
-~/.agents/skills/superpowers/ → ~/.codex/superpowers/skills/
+```text
+~/.agents/skills/graphenepowers/ -> ~/.codex/graphenepowers/skills/
 ```
 
-The `using-superpowers` skill is discovered automatically and enforces skill usage discipline — no additional configuration needed.
+The `using-graphenepowers` skill is the entry point. It routes development requests through `triage`, then into design, planning, execution, review, and retrospective.
 
 ## Usage
 
-Skills are discovered automatically. Codex activates them when:
-- You mention a skill by name (e.g., "use brainstorming")
-- The task matches a skill's description
-- The `using-superpowers` skill directs Codex to use one
+Skills are discovered automatically. Codex can activate them when:
+
+- you mention a skill by name
+- the task matches a skill description
+- `using-graphenepowers` routes the request to the right workflow
 
 ### Personal Skills
 
@@ -85,42 +80,39 @@ description: Use when [condition] - [what it does]
 [Your skill content here]
 ```
 
-The `description` field is how Codex decides when to activate a skill automatically — write it as a clear trigger condition.
-
 ## Updating
 
 ```bash
-cd ~/.codex/superpowers && git pull
+cd ~/.codex/graphenepowers && git pull
 ```
-
-Skills update instantly through the symlink.
 
 ## Uninstalling
 
 ```bash
-rm ~/.agents/skills/superpowers
+rm ~/.agents/skills/graphenepowers
 ```
 
 **Windows (PowerShell):**
+
 ```powershell
-Remove-Item "$env:USERPROFILE\.agents\skills\superpowers"
+Remove-Item "$env:USERPROFILE\.agents\skills\graphenepowers"
 ```
 
-Optionally delete the clone: `rm -rf ~/.codex/superpowers` (Windows: `Remove-Item -Recurse -Force "$env:USERPROFILE\.codex\superpowers"`).
+Optionally remove the clone:
+
+```bash
+rm -rf ~/.codex/graphenepowers
+```
 
 ## Troubleshooting
 
 ### Skills not showing up
 
-1. Verify the symlink: `ls -la ~/.agents/skills/superpowers`
-2. Check skills exist: `ls ~/.codex/superpowers/skills`
-3. Restart Codex — skills are discovered at startup
+1. Verify the symlink: `ls -la ~/.agents/skills/graphenepowers`
+2. Check that skills exist: `find ~/.codex/graphenepowers/skills -maxdepth 2 -name SKILL.md`
+3. Restart Codex
 
-### Windows junction issues
+## See Also
 
-Junctions normally work without special permissions. If creation fails, try running PowerShell as administrator.
-
-## Getting Help
-
-- Report issues: https://github.com/obra/superpowers/issues
-- Main documentation: https://github.com/obra/superpowers
+- [`README.md`](../README.md)
+- [`skills/using-graphenepowers/SKILL.md`](../skills/using-graphenepowers/SKILL.md)

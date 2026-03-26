@@ -1,6 +1,6 @@
 {
-  "name": "superpowers",
-  "description": "Core skills library: TDD, debugging, collaboration patterns, and proven techniques",
-  "version": "5.0.6",
+  "name": "graphenepowers",
+  "description": "GraphenePowers v4 workflow for design, planning, execution, review, and retrospective",
+  "version": "0.1.0",
   "contextFileName": "GEMINI.md"
 }
