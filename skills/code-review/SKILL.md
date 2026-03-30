@@ -13,23 +13,35 @@ One public skill, multiple review passes.
 
 **Announce at start:** "I'm using the code-review skill to run scoped review passes."
 
+Support asset for clean-context reviewers:
+
+- `code-review/subagents/review-subagent/AGENTS.md`
+- `code-review/review-policy.md`
+
+Workflow assets in this skill:
+
+- `code-review/review-modes/` - mode-specific reviewer prompts
+- `code-review/subagents/` - reviewer agent instructions
+- `code-review/review-policy.md` - input policy and shared review rules
+
 ## Review Modes
 
 ### `Preflight Spec Review`
-Use after `writing-plans` for `Feature`, or for any `Task` elevated by hard override.
+Use after `writing-plans` for `Feature`, or for any `Small Task` elevated by a classification hard override.
 
 - Checks plan/spec coherence before expensive execution starts
 - Checks that seeded task cards have usable `write_set`, `acceptance`, `verification`, and expected artifacts
+- For `Feature`, checks the design contract, macro graph, and first committed window
 - Failure returns to `graphenepowers:writing-plans`
-- Template: `code-review/preflight-spec-reviewer.md`
+- Template: `code-review/review-modes/preflight-spec-reviewer.md`
 
 ### `Spec Delta Review`
 Use after execution if rolling re-plan, exception paths, or scope drift occurred.
 
 - Checks implementation against approved deltas, not implementer claims
-- Uses relevant task cards from `plan-progress.md` as the primary scope/evidence summary when available
+- Uses relevant task cards from `plan-progress.md` and result packets as the primary scope/evidence summary when available
 - Failure returns to `graphenepowers:executing-plans.dispatch`
-- Template: `code-review/spec-delta-reviewer.md`
+- Template: `code-review/review-modes/spec-delta-reviewer.md`
 
 ### `Quality Review`
 Use after execution is complete and verification evidence exists.
@@ -37,23 +49,21 @@ Use after execution is complete and verification evidence exists.
 - Checks bugs, regressions, missing tests, risky design, and production readiness
 - Uses review-ready task cards, artifacts, and verification evidence instead of implementer summaries when available
 - Failure returns to `graphenepowers:executing-plans.dispatch`
-- Template: `code-review/quality-reviewer.md`
+- Template: `code-review/review-modes/quality-reviewer.md`
 
-## Rules
+## Workflow Router
 
-- Each review mode uses a fresh reviewer
-- Never pass session history when scoped artifacts will do
-- Never let the same reviewer do two modes for the same work item
-- Prefer `plan-progress.md` task cards over ad-hoc human summaries when they contain the needed scope and evidence
-- Important or Critical findings block completion
-- If reviewer is wrong, push back with evidence, not vibes
+Read these files before choosing a review mode:
+
+1. `code-review/review-policy.md`
+2. the specific prompt in `code-review/review-modes/`
 
 ## Quick Reference
 
 | Mode | Inputs | Failure Return |
 |------|--------|----------------|
-| `Preflight Spec Review` | spec, plan, triage summary, `plan-progress` seed | `graphenepowers:writing-plans` |
-| `Spec Delta Review` | approved plan, deltas, relevant task cards, changed files | `graphenepowers:executing-plans.dispatch` |
+| `Preflight Spec Review` | spec or design contract, plan, classification summary, `plan-progress` seed | `graphenepowers:writing-plans` |
+| `Spec Delta Review` | approved plan, deltas, relevant task cards, result packets, changed files | `graphenepowers:executing-plans.dispatch` |
 | `Quality Review` | review cards, diff, tests, verification evidence | `graphenepowers:executing-plans.dispatch` |
 
 ## Common Mistakes
@@ -74,6 +84,14 @@ Use after execution is complete and verification evidence exists.
 - **Problem:** Reviewer misses acceptance criteria, artifacts, or blocked scope drift already recorded in `plan-progress.md`
 - **Fix:** Load the relevant task cards first, then inspect code and evidence
 
+**Treating findings as orders instead of technical claims**
+- **Problem:** implementers blindly apply unclear or context-free review comments
+- **Fix:** verify each finding against code, tests, and the approved contract before changing anything
+
+**Partial implementation of unclear feedback**
+- **Problem:** linked issues get fixed inconsistently and create new drift
+- **Fix:** clarify all unclear items first, then implement confirmed fixes one item at a time with verification
+
 ## Integration
 
 **Called by:**
@@ -81,6 +99,6 @@ Use after execution is complete and verification evidence exists.
 - `graphenepowers:writing-plans` for preflight review
 
 **Uses templates:**
-- `code-review/preflight-spec-reviewer.md`
-- `code-review/spec-delta-reviewer.md`
-- `code-review/quality-reviewer.md`
+- `code-review/review-modes/preflight-spec-reviewer.md`
+- `code-review/review-modes/spec-delta-reviewer.md`
+- `code-review/review-modes/quality-reviewer.md`

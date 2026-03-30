@@ -1,0 +1,61 @@
+title: GraphenePowers Task Event
+type: object
+required:
+  - task_event
+properties:
+  task_event:
+    type: object
+    required:
+      - task_id
+      - kind
+    properties:
+      task_id:
+        type: string
+      kind:
+        enum:
+          - task_started
+          - task_completed
+          - task_blocked
+          - task_unblocked
+          - task_reopened
+          - verification_recorded
+          - review_state_updated
+          - warning_recorded
+      status:
+        enum: [backlog, ready, in_progress, blocked, review, done, superseded]
+      owner:
+        type: string
+      active_agent_time:
+        type: string
+      elapsed_active_time:
+        type: string
+      verification:
+        type: object
+        properties:
+          commands:
+            type: array
+            items:
+              type: string
+          evidence:
+            type: array
+            items:
+              type: string
+      artifacts:
+        type: array
+        items:
+          type: string
+      review_state:
+        enum: [none, pending, changes_requested, passed]
+      blocker:
+        type: object
+        properties:
+          id:
+            type: string
+          kind:
+            enum: [Human, Environment, External, SpecAmbiguity, TestFlake]
+          summary:
+            type: string
+          status:
+            enum: [open, cleared]
+      notes:
+        type: string

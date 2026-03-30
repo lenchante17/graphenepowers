@@ -1,5 +1,7 @@
 # GraphenePowers v4 Patch Notes
 
+> Terminology note: this document predates the `Small Task` terminology update. Read historical grade references to `Task` as `Small Task` unless the text is explicitly discussing the earlier wording.
+
 This file records what was patched in the copied skill tree while moving from the legacy layout to the GraphenePowers v4 model.
 
 ## Applied Core Skill Updates
@@ -12,7 +14,7 @@ This file records what was patched in the copied skill tree while moving from th
   - narrowed to Feature-grade or confidence-low design work
   - updated spec path references to `docs/graphenepowers/specs`
 
-- [triage](../../../skills/triage/SKILL.md)
+- [triage routing module](../../../skills/using-graphenepowers/routing/triage.md)
   - added as the normal development entry classifier
 
 - [writing-plans](../../../skills/writing-plans/SKILL.md)
@@ -37,23 +39,20 @@ This file records what was patched in the copied skill tree while moving from th
 
 ## Converted Legacy Skills
 
-These skills now act as deprecation or redirect notes rather than primary workflows:
+These skills were originally kept as redirect notes, then removed after their surviving rules were merged into current owners:
 
-- [dispatching-parallel-agents](../../../skills/dispatching-parallel-agents/SKILL.md)
-- [using-git-worktrees](../../../skills/using-git-worktrees/SKILL.md)
-- [subagent-driven-development](../../../skills/subagent-driven-development/SKILL.md)
-- [requesting-code-review](../../../skills/requesting-code-review/SKILL.md)
-- [receiving-code-review](../../../skills/receiving-code-review/SKILL.md)
-- [verification-before-completion](../../../skills/verification-before-completion/SKILL.md)
-- [finishing-a-development-branch](../../../skills/finishing-a-development-branch/SKILL.md)
+- `dispatching-parallel-agents` -> `executing-plans`
+- `using-git-worktrees` -> `executing-plans`
+- `subagent-driven-development` -> `executing-plans` plus `code-review`
+- `requesting-code-review` -> `code-review`
+- `receiving-code-review` -> `code-review`
+- `verification-before-completion` -> `executing-plans`
+- `finishing-a-development-branch` -> `retrospective`
 
 ## Supporting File Updates
 
-- [writing-plans/plan-document-reviewer-prompt.md](../../../skills/writing-plans/plan-document-reviewer-prompt.md)
+- [writing-plans/review/plan-document-reviewer-prompt.md](../../../skills/writing-plans/review/plan-document-reviewer-prompt.md)
   - reduced to a compatibility wrapper around preflight review
-
-- [subagent-driven-development/code-quality-reviewer-prompt.md](../../../skills/subagent-driven-development/code-quality-reviewer-prompt.md)
-  - redirected to the unified `code-review` templates
 
 - [using-graphenepowers/references/codex-tools.md](../../../skills/using-graphenepowers/references/codex-tools.md)
 - [using-graphenepowers/references/gemini-tools.md](../../../skills/using-graphenepowers/references/gemini-tools.md)
@@ -61,10 +60,4 @@ These skills now act as deprecation or redirect notes rather than primary workfl
 
 ## Residual Archive Files
 
-Some support files remain as archival references because they no longer drive the primary workflow directly:
-
-- `skills/subagent-driven-development/spec-reviewer-prompt.md`
-- `skills/subagent-driven-development/implementer-prompt.md`
-- `skills/systematic-debugging/*` reference documents
-
-These are not primary entry points in v4, but they were left in place because they still contain reusable patterns.
+Earlier snapshots left some redirect prompts in place. The current canonical tree no longer keeps those archive wrappers once their useful rules were absorbed into active skills.

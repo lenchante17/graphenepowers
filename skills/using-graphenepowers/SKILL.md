@@ -1,6 +1,6 @@
 ---
 name: using-graphenepowers
-description: Use when starting any conversation to decide which GraphenePowers skill applies before responding, especially for development work that may need triage, design, planning, execution, review, or debugging discipline
+description: Use when starting any conversation and deciding which GraphenePowers route applies before responding, especially for development work that may need classification, design, planning, execution, review, or debugging discipline
 ---
 
 <SUBAGENT-STOP>
@@ -13,7 +13,7 @@ If you were dispatched as a subagent for a scoped task, skip this skill.
 
 GraphenePowers is a workflow system, not a bag of optional tips.
 
-**Core principle:** Check skills before action. Rationalizing "I'll do one quick thing first" is exactly what this system exists to stop.
+**Core principle:** Route the work before acting. Rationalizing "I'll do one quick thing first" is exactly what this system exists to stop.
 
 ## Instruction Priority
 
@@ -25,25 +25,54 @@ If local instructions conflict with a skill, the local instructions win.
 
 ## The Rule
 
-Invoke relevant or requested skills before responding or acting. If there is even a small chance a skill applies, check it.
+Use `graphenepowers:using-graphenepowers` as the single public entrypoint for workflow routing.
 
-For development work, default entry is:
+This skill owns internal routing modules:
+
+- `routing/triage.md` - classification, hard overrides, confidence, and route selection
+- `routing/micro.md` - fast path for isolated work
+- `routing/small-task.md` - lightweight planning and execution route
+- `routing/feature.md` - design-first route for larger or low-confidence work
+- `routing/cross-cutting.md` - debugging and TDD rules that can interrupt any route
+
+## Default Route
+
+For development work, start here:
 
 ```text
 Request
--> graphenepowers:triage
--> Micro: execute directly
--> Task: graphenepowers:writing-plans
--> Feature: graphenepowers:brainstorming -> graphenepowers:writing-plans
--> graphenepowers:executing-plans
--> graphenepowers:code-review
--> graphenepowers:retrospective
+-> graphenepowers:using-graphenepowers
+-> routing/triage.md
+-> Micro:
+     -> routing/micro.md
+     -> execute directly
+-> Small Task:
+     -> routing/small-task.md
+     -> graphenepowers:writing-plans (lightweight)
+     -> graphenepowers:executing-plans
+     -> graphenepowers:code-review
+     -> graphenepowers:retrospective
+-> Feature:
+     -> routing/feature.md
+     -> research similar work and latest knowledge
+     -> present context brief
+     -> graphenepowers:brainstorming
+     -> refine design as needed
+     -> lock design contract
+     -> graphenepowers:writing-plans (windowed)
+     -> graphenepowers:executing-plans
+     -> graphenepowers:code-review
+     -> graphenepowers:retrospective
 ```
+
+Execution, review, and retrospective may dispatch clean-context specialist subagents with scoped artifacts instead of full session history.
 
 For bugs or unexplained failures:
 
 ```text
 Request
+-> graphenepowers:using-graphenepowers
+-> routing/cross-cutting.md
 -> graphenepowers:systematic-debugging
 -> if code change required: graphenepowers:test-driven-development
 ```
@@ -54,7 +83,7 @@ These thoughts mean stop:
 
 - "This is simple, I don't need a skill"
 - "Let me inspect files first"
-- "I remember the skill already"
+- "I remember the routing already"
 - "I'll just do one thing before checking"
 - "The workflow is probably overkill"
 
@@ -62,7 +91,7 @@ These thoughts mean stop:
 
 Use this order when multiple skills might apply:
 
-1. Entry / control skills: `graphenepowers:triage`, `graphenepowers:systematic-debugging`
+1. Entry / control skills: `graphenepowers:using-graphenepowers`, `graphenepowers:systematic-debugging`
 2. Design skills: `graphenepowers:brainstorming`
 3. Planning skills: `graphenepowers:writing-plans`
 4. Execution / review / closure: `graphenepowers:executing-plans`, `graphenepowers:code-review`, `graphenepowers:retrospective`
@@ -76,4 +105,4 @@ Skills use Claude Code tool names. Non-CC platforms should use the mappings in:
 
 ## Bottom Line
 
-User intent says what to do. GraphenePowers says how to do it without drifting.
+User intent says what to do. GraphenePowers says how to route it without drifting.

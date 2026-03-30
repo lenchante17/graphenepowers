@@ -1,5 +1,7 @@
 # obra/graphenepowers 재설계 — 완결 설계 문서 v4
 
+> Terminology note: this document predates the `Small Task` terminology update. Read historical grade references to `Task` as `Small Task` unless the text is explicitly describing the older v4 wording.
+
 > v3의 구조는 유지한다. 이번 버전은 남아 있던 의미론 공백과 운영 규칙만 보강한다.
 
 ## 이번 보완의 범위

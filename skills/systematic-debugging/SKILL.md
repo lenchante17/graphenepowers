@@ -111,7 +111,7 @@ You MUST complete each phase before proceeding to the next.
 
    **WHEN error is deep in call stack:**
 
-   See `root-cause-tracing.md` in this directory for the complete backward tracing technique.
+   See `techniques/root-cause-tracing.md` for the complete backward tracing technique.
 
    **Quick version:**
    - Where does bad value originate?
@@ -279,9 +279,12 @@ If systematic investigation reveals issue is truly environmental, timing-depende
 
 These techniques are part of systematic debugging and available in this directory:
 
-- **`root-cause-tracing.md`** - Trace bugs backward through call stack to find original trigger
-- **`defense-in-depth.md`** - Add validation at multiple layers after finding root cause
-- **`condition-based-waiting.md`** - Replace arbitrary timeouts with condition polling
+- **`techniques/root-cause-tracing.md`** - Trace bugs backward through call stack to find original trigger
+- **`techniques/defense-in-depth.md`** - Add validation at multiple layers after finding root cause
+- **`techniques/condition-based-waiting.md`** - Replace arbitrary timeouts with condition polling
+- **`examples/condition-based-waiting-example.ts`** - Full waiting helper example
+- **`scripts/find-polluter.sh`** - Bisection helper for isolation failures
+- **`validations/`** - pressure and academic validation notes
 
 **Related skills:**
 - **graphenepowers:test-driven-development** - For creating failing test case (Phase 4, Step 1)

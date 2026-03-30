@@ -1,0 +1,151 @@
+title: GraphenePowers Plan Progress
+type: object
+required:
+  - meta
+  - tasks
+  - blockers
+  - events
+properties:
+  meta:
+    type: object
+    required:
+      - plan_version
+      - grade
+      - planning_mode
+      - confidence
+      - profile_asymmetry
+      - graph_version
+      - critical_path
+      - ready_parallel_lanes
+      - estimated_duration
+      - estimated_effort
+      - writer
+    properties:
+      plan_version:
+        type: integer
+      grade:
+        enum: [Micro, Small Task, Feature]
+      planning_mode:
+        enum: [lightweight, windowed]
+      confidence:
+        enum: [low, medium, high]
+      profile_asymmetry:
+        type: number
+      graph_version:
+        type: integer
+      critical_path:
+        type: array
+        items:
+          type: string
+      ready_parallel_lanes:
+        type: array
+        items:
+          type: array
+          items:
+            type: string
+      estimated_duration:
+        type: string
+      estimated_effort:
+        type: string
+      contract_ref:
+        type: string
+      current_window_id:
+        type: string
+      window_status:
+        type: string
+      started_at:
+        type: [string, 'null']
+      completed_at:
+        type: [string, 'null']
+      writer:
+        type: string
+  tasks:
+    type: array
+    items:
+      type: object
+      required:
+        - id
+        - name
+        - depends_on
+        - duration_pert
+        - effort_pert
+        - status
+        - owner
+        - write_set
+        - acceptance
+        - verification
+        - artifacts
+        - review_state
+        - blocker_ids
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        depends_on:
+          type: array
+          items:
+            type: string
+        window_id:
+          type: string
+        duration_pert:
+          type: object
+          properties:
+            o: { type: number }
+            m: { type: number }
+            p: { type: number }
+        effort_pert:
+          type: object
+          properties:
+            o: { type: number }
+            m: { type: number }
+            p: { type: number }
+        status:
+          enum: [backlog, ready, in_progress, blocked, review, done, superseded]
+        active_agent_time:
+          type: [string, 'null']
+        elapsed_active_time:
+          type: [string, 'null']
+        owner:
+          type: string
+        write_set:
+          type: array
+          items:
+            type: string
+        acceptance:
+          type: array
+          items:
+            type: string
+        verification:
+          type: object
+          properties:
+            commands:
+              type: array
+              items:
+                type: string
+            evidence:
+              type: array
+              items:
+                type: string
+        artifacts:
+          type: array
+          items:
+            type: string
+        review_state:
+          enum: [none, pending, changes_requested, passed]
+        blocker_ids:
+          type: array
+          items:
+            type: string
+  blockers:
+    type: array
+    items:
+      type: object
+  events:
+    type: array
+    items:
+      type: object
+  result_packets:
+    type: array
+    items:
+      type: string

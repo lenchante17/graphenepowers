@@ -13,6 +13,14 @@ Write the test first. Watch it fail. Write minimal code to pass.
 
 **Violating the letter of the rules is violating the spirit of the rules.**
 
+Support assets:
+
+- `test-driven-development/cycle.md`
+- `test-driven-development/guardrails.md`
+- `test-driven-development/integration/execution-evidence.md`
+- `test-driven-development/examples/bug-fix.md`
+- `test-driven-development/references/testing-anti-patterns.md`
+
 ## When to Use
 
 **Always:**
@@ -44,164 +52,15 @@ Write code before the test? Delete it. Start over.
 
 Implement fresh from tests. Period.
 
-## Red-Green-Refactor
+## Workflow Router
 
-```dot
-digraph tdd_cycle {
-    rankdir=LR;
-    red [label="RED\nWrite failing test", shape=box, style=filled, fillcolor="#ffcccc"];
-    verify_red [label="Verify fails\ncorrectly", shape=diamond];
-    green [label="GREEN\nMinimal code", shape=box, style=filled, fillcolor="#ccffcc"];
-    verify_green [label="Verify passes\nAll green", shape=diamond];
-    refactor [label="REFACTOR\nClean up", shape=box, style=filled, fillcolor="#ccccff"];
-    next [label="Next", shape=ellipse];
+Read the TDD materials in order:
 
-    red -> verify_red;
-    verify_red -> green [label="yes"];
-    verify_red -> red [label="wrong\nfailure"];
-    green -> verify_green;
-    verify_green -> refactor [label="yes"];
-    verify_green -> green [label="no"];
-    refactor -> verify_green [label="stay\ngreen"];
-    verify_green -> next;
-    next -> red;
-}
-```
+1. `test-driven-development/cycle.md`
+2. `test-driven-development/guardrails.md`
+3. `test-driven-development/integration/execution-evidence.md`
 
-### RED - Write Failing Test
-
-Write one minimal test showing what should happen.
-
-<Good>
-```typescript
-test('retries failed operations 3 times', async () => {
-  let attempts = 0;
-  const operation = () => {
-    attempts++;
-    if (attempts < 3) throw new Error('fail');
-    return 'success';
-  };
-
-  const result = await retryOperation(operation);
-
-  expect(result).toBe('success');
-  expect(attempts).toBe(3);
-});
-```
-Clear name, tests real behavior, one thing
-</Good>
-
-<Bad>
-```typescript
-test('retry works', async () => {
-  const mock = jest.fn()
-    .mockRejectedValueOnce(new Error())
-    .mockRejectedValueOnce(new Error())
-    .mockResolvedValueOnce('success');
-  await retryOperation(mock);
-  expect(mock).toHaveBeenCalledTimes(3);
-});
-```
-Vague name, tests mock not code
-</Bad>
-
-**Requirements:**
-- One behavior
-- Clear name
-- Real code (no mocks unless unavoidable)
-
-### Verify RED - Watch It Fail
-
-**MANDATORY. Never skip.**
-
-```bash
-npm test path/to/test.test.ts
-```
-
-Confirm:
-- Test fails (not errors)
-- Failure message is expected
-- Fails because feature missing (not typos)
-
-**Test passes?** You're testing existing behavior. Fix test.
-
-**Test errors?** Fix error, re-run until it fails correctly.
-
-### GREEN - Minimal Code
-
-Write simplest code to pass the test.
-
-<Good>
-```typescript
-async function retryOperation<T>(fn: () => Promise<T>): Promise<T> {
-  for (let i = 0; i < 3; i++) {
-    try {
-      return await fn();
-    } catch (e) {
-      if (i === 2) throw e;
-    }
-  }
-  throw new Error('unreachable');
-}
-```
-Just enough to pass
-</Good>
-
-<Bad>
-```typescript
-async function retryOperation<T>(
-  fn: () => Promise<T>,
-  options?: {
-    maxRetries?: number;
-    backoff?: 'linear' | 'exponential';
-    onRetry?: (attempt: number) => void;
-  }
-): Promise<T> {
-  // YAGNI
-}
-```
-Over-engineered
-</Bad>
-
-Don't add features, refactor other code, or "improve" beyond the test.
-
-### Verify GREEN - Watch It Pass
-
-**MANDATORY.**
-
-```bash
-npm test path/to/test.test.ts
-```
-
-Confirm:
-- Test passes
-- Other tests still pass
-- Output pristine (no errors, warnings)
-
-**Test fails?** Fix code, not test.
-
-**Other tests fail?** Fix now.
-
-### REFACTOR - Clean Up
-
-After green only:
-- Remove duplication
-- Improve names
-- Extract helpers
-
-Keep tests green. Don't add behavior.
-
-### Repeat
-
-Next failing test for next feature.
-
-## Good Tests
-
-| Quality | Good | Bad |
-|---------|------|-----|
-| **Minimal** | One thing. "and" in name? Split it. | `test('validates email and domain and whitespace')` |
-| **Clear** | Name describes behavior | `test('test1')` |
-| **Shows intent** | Demonstrates desired API | Obscures what code should do |
+Use `test-driven-development/examples/bug-fix.md` as the compact worked example.
 
 ## Why Order Matters
 
@@ -253,77 +112,6 @@ Tests-first force edge case discovery before implementing. Tests-after verify yo
 
 30 minutes of tests after ≠ TDD. You get coverage, lose proof tests work.
 
-## Common Rationalizations
-
-| Excuse | Reality |
-|--------|---------|
-| "Too simple to test" | Simple code breaks. Test takes 30 seconds. |
-| "I'll test after" | Tests passing immediately prove nothing. |
-| "Tests after achieve same goals" | Tests-after = "what does this do?" Tests-first = "what should this do?" |
-| "Already manually tested" | Ad-hoc ≠ systematic. No record, can't re-run. |
-| "Deleting X hours is wasteful" | Sunk cost fallacy. Keeping unverified code is technical debt. |
-| "Keep as reference, write tests first" | You'll adapt it. That's testing after. Delete means delete. |
-| "Need to explore first" | Fine. Throw away exploration, start with TDD. |
-| "Test hard = design unclear" | Listen to test. Hard to test = hard to use. |
-| "TDD will slow me down" | TDD faster than debugging. Pragmatic = test-first. |
-| "Manual test faster" | Manual doesn't prove edge cases. You'll re-test every change. |
-| "Existing code has no tests" | You're improving it. Add tests for existing code. |
-
-## Red Flags - STOP and Start Over
-
-- Code before test
-- Test after implementation
-- Test passes immediately
-- Can't explain why test failed
-- Tests added "later"
-- Rationalizing "just this once"
-- "I already manually tested it"
-- "Tests after achieve the same purpose"
-- "It's about spirit not ritual"
-- "Keep as reference" or "adapt existing code"
-- "Already spent X hours, deleting is wasteful"
-- "TDD is dogmatic, I'm being pragmatic"
-- "This is different because..."
-
-**All of these mean: Delete code. Start over with TDD.**
-
-## Example: Bug Fix
-
-**Bug:** Empty email accepted
-
-**RED**
-```typescript
-test('rejects empty email', async () => {
-  const result = await submitForm({ email: '' });
-  expect(result.error).toBe('Email required');
-});
-```
-
-**Verify RED**
-```bash
-$ npm test
-FAIL: expected 'Email required', got undefined
-```
-
-**GREEN**
-```typescript
-function submitForm(data: FormData) {
-  if (!data.email?.trim()) {
-    return { error: 'Email required' };
-  }
-  // ...
-}
-```
-
-**Verify GREEN**
-```bash
-$ npm test
-PASS
-```
-
-**REFACTOR**
-Extract validation for multiple fields if needed.
-
 ## Verification Checklist
 
 Before marking work complete:
@@ -339,15 +127,6 @@ Before marking work complete:
 
 Can't check all boxes? You skipped TDD. Start over.
 
-## When Stuck
-
-| Problem | Solution |
-|---------|----------|
-| Don't know how to test | Write wished-for API. Write assertion first. Ask your human partner. |
-| Test too complicated | Design too complicated. Simplify interface. |
-| Must mock everything | Code too coupled. Use dependency injection. |
-| Test setup huge | Extract helpers. Still complex? Simplify design. |
-
 ## Debugging Integration
 
 Bug found? Write failing test reproducing it. Follow TDD cycle. Test proves fix and prevents regression.
@@ -358,23 +137,7 @@ Never fix bugs without a test.
 
 `graphenepowers:executing-plans` should invoke this skill for any task that writes production code.
 
-The RED/GREEN trail must be attached to the task card, not left in a free-form report:
-- failing and passing test commands belong in task `verification.commands`
-- proof of those runs belongs in task `verification.evidence`
-- test files, logs, and generated fixtures belong in task `artifacts`
-- a task without attached TDD evidence must not move to `review`
-
-No RED/GREEN evidence means `verify` should fail:
-- no watched failing test -> not ready
-- no watched passing test -> not ready
-- implementer report without command evidence -> not ready
-
-## Testing Anti-Patterns
-
-When adding mocks or test utilities, read @testing-anti-patterns.md to avoid common pitfalls:
-- Testing mock behavior instead of real behavior
-- Adding test-only methods to production classes
-- Mocking without understanding dependencies
+Attach the RED and GREEN trail to the task card, not to a free-form status report.
 
 ## Final Rule
 
