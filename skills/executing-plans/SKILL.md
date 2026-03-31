@@ -13,6 +13,7 @@ Execute a written plan as an orchestrator, not as a pile of ad-hoc edits.
 
 **Core principles:**
 - The orchestrator is the only writer of `plan-progress.md`
+- Every durable execution change is written back to `plan-progress.md` before work moves on
 - Graph views and kanban views are rendered from task nodes, never hand-edited
 - `duration` and `effort` are different metrics; never compare the wrong one
 - `verify` is an explicit state, not a polite suggestion
@@ -33,6 +34,15 @@ Support assets:
 - `docs/graphenepowers/plan-progress-operations.md`
 - `docs/graphenepowers/schemas/task-event.schema.yaml`
 - `docs/graphenepowers/templates/reclassification-record.md`
+
+## State Discipline
+
+`graphenepowers:executing-plans` owns the live state loop after planning.
+
+- Read the current plan and `plan-progress.md` before dispatching work
+- After each durable transition, update the YAML task nodes in `plan-progress.md`
+- Re-render the human graph summary, dependency levels, kanban, review queue, and blocker views from those nodes
+- Re-run validation after state updates so stale graph views or malformed records do not accumulate silently
 
 ## Workflow Router
 
@@ -74,10 +84,11 @@ Not every warning is a full stop.
 
 | Situation | Action |
 |-----------|--------|
+| Any durable task transition | Update the task node in `plan-progress.md`, re-render graph and human views, then validate before continuing |
 | Need code change | Use `graphenepowers:test-driven-development` |
 | Root cause unclear | Use `graphenepowers:systematic-debugging` |
 | Route changes after planning starts | pause affected work, record `docs/graphenepowers/templates/reclassification-record.md`, update affected artifacts, then resume only if the gate clears |
-| Worker finished a task | Attach `artifacts` and `verification`, update graph and kanban views, then move card to `review` |
+| Worker finished a task | Attach `artifacts` and `verification`, update the `plan-progress.md` task node, re-render graph and kanban views, then move card to `review` |
 | Feature plan before execution | Hand off to `graphenepowers:code-review` preflight mode |
 | All tasks verified | Hand off review-ready cards to `graphenepowers:code-review` final mode |
 | Review passes | Mark cards `done` and hand off to `graphenepowers:retrospective` |
@@ -92,6 +103,10 @@ Not every warning is a full stop.
 **Treating the Markdown board as the source of truth**
 - **Problem:** YAML and kanban drift apart
 - **Fix:** update task nodes only, then re-render the summary and kanban
+
+**Updating task state without refreshing the graph**
+- **Problem:** dependency levels, critical path context, and board projections look underfilled or stale
+- **Fix:** after each durable transition, update task nodes plus graph summary / dependency views together
 
 **Comparing effort to duration**
 - **Problem:** Parallel work looks "late" when it is only expensive

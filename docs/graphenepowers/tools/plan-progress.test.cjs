@@ -2,6 +2,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const { spawnSync } = require('node:child_process');
 const path = require('node:path');
+const { readPlanProgress } = require('./lib/plan-progress.cjs');
 
 const repoRoot = path.resolve(__dirname, '..', '..', '..');
 const docsRoot = path.join(repoRoot, 'docs', 'graphenepowers');
@@ -56,4 +57,26 @@ test('render-plan-progress prints the review queue from the feature example', ()
   assert.equal(result.status, 0, result.stderr || result.stdout);
   assert.match(result.stdout, /Review Queue/);
   assert.match(result.stdout, /T3 Implement parser core/);
+});
+
+test('readPlanProgress preserves multiline task metadata', () => {
+  const filePath = path.join(examplesRoot, 'feature-windowed', 'plan-progress.md');
+  const { tasks } = readPlanProgress(filePath);
+  const parserTask = tasks.find((task) => task.id === 'T3');
+
+  assert.deepEqual(parserTask.acceptance, [
+    'parser accepts locked v2 payloads',
+    'parser errors remain typed',
+  ]);
+  assert.deepEqual(parserTask.verification_commands, [
+    'npm test -- widget/parser --runInBand',
+  ]);
+  assert.deepEqual(parserTask.write_set, [
+    'src/widget/parser.ts',
+    'tests/widget/parser.test.ts',
+  ]);
+  assert.deepEqual(parserTask.artifacts, [
+    'src/widget/parser.ts',
+    'tests/widget/parser.test.ts',
+  ]);
 });

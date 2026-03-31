@@ -69,10 +69,18 @@ function parseTasks(yaml) {
     id: extractField(block, 'id'),
     name: extractField(block, 'name'),
     depends_on: parseScalar(extractField(block, 'depends_on')),
+    duration_pert: parseScalar(extractField(block, 'duration_pert')),
+    effort_pert: parseScalar(extractField(block, 'effort_pert')),
     status: extractField(block, 'status'),
     review_state: extractField(block, 'review_state'),
     owner: extractField(block, 'owner'),
     window_id: extractField(block, 'window_id'),
+    write_set: parseYamlList(block, 'write_set'),
+    acceptance: parseYamlList(block, 'acceptance'),
+    artifacts: parseYamlList(block, 'artifacts'),
+    blocker_ids: parseYamlList(block, 'blocker_ids'),
+    verification_commands: parseNestedYamlList(block, 'verification', 'commands'),
+    verification_evidence: parseNestedYamlList(block, 'verification', 'evidence'),
     raw: block,
   }));
 }
@@ -115,13 +123,14 @@ function parseMeta(yaml) {
 }
 
 function extractField(text, field) {
-  const pattern = new RegExp(`^\\s*${field}:\\s*(.+)$`, 'm');
+  const pattern = new RegExp(`^[ \\t]*${field}:[ \\t]*([^\\r\\n]+)[ \\t]*$`, 'm');
   const match = text.match(pattern);
   return match ? match[1].trim() : null;
 }
 
 function hasField(text, field) {
-  return extractField(text, field) !== null;
+  const pattern = new RegExp(`^[ \\t]*${field}:[ \\t]*(?:[^\\r\\n]*)$`, 'm');
+  return pattern.test(text);
 }
 
 function parseScalar(value) {
@@ -220,6 +229,99 @@ function findDuplicateTaskIds(tasks) {
   return [...duplicates];
 }
 
+function parseYamlList(text, field) {
+  const inlineValue = parseScalar(extractField(text, field));
+  if (Array.isArray(inlineValue)) {
+    return inlineValue;
+  }
+  if (inlineValue !== null && inlineValue !== undefined) {
+    return [inlineValue];
+  }
+
+  const lines = text.split(/\r?\n/);
+  let captureIndent = null;
+  const items = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const fieldMatch = line.match(/^(\s*)([A-Za-z0-9_]+):\s*$/);
+
+    if (captureIndent === null) {
+      if (fieldMatch && fieldMatch[2] === field) {
+        captureIndent = fieldMatch[1].length;
+      }
+      continue;
+    }
+
+    if (!line.trim()) {
+      continue;
+    }
+
+    const indent = line.match(/^(\s*)/)?.[1].length ?? 0;
+    if (indent <= captureIndent) {
+      break;
+    }
+
+    const itemMatch = line.match(/^\s*-\s+(.+)$/);
+    if (itemMatch) {
+      items.push(parseScalar(itemMatch[1]));
+    }
+  }
+
+  return items;
+}
+
+function parseNestedYamlList(text, parentField, childField) {
+  const lines = text.split(/\r?\n/);
+  let parentIndent = null;
+  let childIndent = null;
+  const items = [];
+
+  for (let index = 0; index < lines.length; index += 1) {
+    const line = lines[index];
+    const indent = line.match(/^(\s*)/)?.[1].length ?? 0;
+    const fieldMatch = line.match(/^(\s*)([A-Za-z0-9_]+):\s*(.*)$/);
+
+    if (parentIndent === null) {
+      if (fieldMatch && fieldMatch[2] === parentField) {
+        parentIndent = fieldMatch[1].length;
+      }
+      continue;
+    }
+
+    if (!line.trim()) {
+      continue;
+    }
+
+    if (indent <= parentIndent) {
+      break;
+    }
+
+    if (childIndent === null) {
+      if (fieldMatch && fieldMatch[2] === childField) {
+        const value = fieldMatch[3];
+        if (value && value.trim()) {
+          const inlineValue = parseScalar(value);
+          return Array.isArray(inlineValue) ? inlineValue : [inlineValue];
+        }
+        childIndent = fieldMatch[1].length;
+      }
+      continue;
+    }
+
+    if (indent <= childIndent) {
+      break;
+    }
+
+    const itemMatch = line.match(/^\s*-\s+(.+)$/);
+    if (itemMatch) {
+      items.push(parseScalar(itemMatch[1]));
+    }
+  }
+
+  return items;
+}
+
 module.exports = {
   REQUIRED_SECTIONS,
   WINDOWED_SECTIONS,
@@ -233,6 +335,8 @@ module.exports = {
   parseScalar,
   parseTasks,
   parseTaskBlocks,
+  parseYamlList,
+  parseNestedYamlList,
   parseMeta,
   readPlanProgress,
 };
