@@ -4,6 +4,7 @@ Reviewers should work from bounded artifacts, not full session history.
 
 ## Default Input Policy
 
+- prefer a bounded packet that follows `docs/graphenepowers/templates/review-packet.md`
 - prefer relevant task cards from `plan-progress.md`
 - include only the files, diffs, plans, and evidence the selected review mode needs
 - keep classification or delta summaries short and concrete
@@ -22,6 +23,7 @@ Reviewers should work from bounded artifacts, not full session history.
 - each review mode uses a fresh clean-context specialist reviewer
 - never let the same reviewer do two modes for the same work item
 - never pass session history when scoped artifacts will do
+- if the reviewer needs more context, expand the packet instead of falling back to session history
 - prefer task cards over ad-hoc summaries when task cards contain the needed scope and evidence
 
 ## Review State Discipline

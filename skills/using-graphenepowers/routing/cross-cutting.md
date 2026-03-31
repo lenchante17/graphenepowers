@@ -23,4 +23,4 @@ Use this path when:
 
 - `graphenepowers:systematic-debugging` handles unclear failures inside `executing-plans`
 - `graphenepowers:test-driven-development` is required before production code changes
-- if debugging changes the scope or risk class, return to `routing/triage.md`
+- if debugging changes the scope or risk class, return to `routing/triage.md`, consult `docs/graphenepowers/human-gates.md`, and record the change with `docs/graphenepowers/templates/reclassification-record.md`

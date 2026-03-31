@@ -29,8 +29,10 @@ Support assets:
 - `executing-plans/scripts/setup-worktree.sh`
 - `executing-plans/feature/windowed-execution.md`
 - `executing-plans/tracking/card-update-rules.md`
+- `docs/graphenepowers/human-gates.md`
 - `docs/graphenepowers/plan-progress-operations.md`
 - `docs/graphenepowers/schemas/task-event.schema.yaml`
+- `docs/graphenepowers/templates/reclassification-record.md`
 
 ## Workflow Router
 
@@ -47,6 +49,8 @@ Load these support docs when needed:
 - `executing-plans/scripts/setup-worktree.sh` when worktree setup needs repeatable directory selection and safety checks
 
 ## Stop Conditions
+
+Use `docs/graphenepowers/human-gates.md` as the shared stop / continue reference.
 
 Stop and ask your human partner when:
 - triage would raise the work to a higher grade
@@ -72,6 +76,7 @@ Not every warning is a full stop.
 |-----------|--------|
 | Need code change | Use `graphenepowers:test-driven-development` |
 | Root cause unclear | Use `graphenepowers:systematic-debugging` |
+| Route changes after planning starts | pause affected work, record `docs/graphenepowers/templates/reclassification-record.md`, update affected artifacts, then resume only if the gate clears |
 | Worker finished a task | Attach `artifacts` and `verification`, update graph and kanban views, then move card to `review` |
 | Feature plan before execution | Hand off to `graphenepowers:code-review` preflight mode |
 | All tasks verified | Hand off review-ready cards to `graphenepowers:code-review` final mode |
@@ -99,6 +104,10 @@ Not every warning is a full stop.
 **Skipping verify because implementer says it works**
 - **Problem:** Completion claims outrun evidence
 - **Fix:** No verify evidence, no state transition
+
+**Silent reclassification**
+- **Problem:** the work changes grade or gate posture without leaving an audit trail
+- **Fix:** pause, re-run triage, record the change, and update the affected plan or contract before proceeding
 
 **Treating time overrun as automatic failure**
 - **Problem:** every estimate miss freezes execution

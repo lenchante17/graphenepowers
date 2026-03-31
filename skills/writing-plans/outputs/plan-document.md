@@ -17,7 +17,13 @@ Write a human-readable plan that matches the execution graph.
 
 **Execution Skill:** `graphenepowers:executing-plans`
 
+**Human Gates:** `docs/graphenepowers/human-gates.md`
+
 **Progress Record:** `docs/graphenepowers/plans/YYYY-MM-DD-<topic>-plan-progress.md`
+
+**Design Contract:** [required path for `Feature`, optional for `Small Task`]
+
+**Reclassification Record:** [optional path if the route changed after initial triage]
 
 ---
 ````
@@ -45,6 +51,7 @@ Write a human-readable plan that matches the execution graph.
 - make `write_set`, acceptance, and produced artifacts specific enough that a clean-context worker does not have to infer ownership
 - when a step changes code, name the concrete files, functions, interfaces, or tests involved instead of saying "update logic" or "handle edge cases"
 - do not reference functions, types, files, or commands that the plan never defines
+- call out any task-specific human gate when a task can threaten a locked interface, invariant, dependency, or public surface
 
 ## No Placeholders
 

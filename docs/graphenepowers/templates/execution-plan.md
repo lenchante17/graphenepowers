@@ -12,7 +12,11 @@
 
 **Progress Record:** `docs/graphenepowers/plans/YYYY-MM-DD-<topic>-plan-progress.md`
 
+**Human Gates:** `docs/graphenepowers/human-gates.md`
+
 **Design Contract:** `[optional path for Feature]`
+
+**Reclassification Record:** `[optional path when route changed after initial triage]`
 
 ---
 

@@ -46,7 +46,8 @@ tasks:
     blocker_ids: []
 
 blockers: []
-events: []
+events:
+  # append route_reclassified entries from docs/graphenepowers/templates/reclassification-record.md when the route changes
 result_packets: []
 ```
 
@@ -93,7 +94,7 @@ result_packets: []
 
 ### Review
 
-- `T8 Example review task`
+- `T8 Quality Review` — `waiting`
 
 ### Done
 

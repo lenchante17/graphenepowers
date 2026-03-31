@@ -35,6 +35,11 @@ This skill owns internal routing modules:
 - `routing/feature.md` - design-first route for larger or low-confidence work
 - `routing/cross-cutting.md` - debugging and TDD rules that can interrupt any route
 
+Shared operating docs:
+
+- `docs/graphenepowers/human-gates.md` - one-page stop / continue policy
+- `docs/graphenepowers/templates/reclassification-record.md` - record any route or grade change after work has started
+
 ## Default Route
 
 For development work, start here:
@@ -56,10 +61,12 @@ Request
      -> routing/feature.md
      -> research similar work and latest knowledge
      -> present context brief
-     -> graphenepowers:brainstorming
-     -> refine design as needed
+     -> choose mode:
+          -> exploratory design -> graphenepowers:brainstorming (exploratory)
+          -> stable existing design -> graphenepowers:brainstorming (contract-confirmation)
      -> lock design contract
      -> graphenepowers:writing-plans (windowed)
+     -> graphenepowers:code-review (Preflight Spec Review)
      -> graphenepowers:executing-plans
      -> graphenepowers:code-review
      -> graphenepowers:retrospective
@@ -95,6 +102,11 @@ Use this order when multiple skills might apply:
 2. Design skills: `graphenepowers:brainstorming`
 3. Planning skills: `graphenepowers:writing-plans`
 4. Execution / review / closure: `graphenepowers:executing-plans`, `graphenepowers:code-review`, `graphenepowers:retrospective`
+
+## Shared Rules
+
+- Use `docs/graphenepowers/human-gates.md` as the shared approval reference across routes.
+- If the route changes after planning or execution has started, pause the affected work, re-run triage, and record the change with `docs/graphenepowers/templates/reclassification-record.md`.
 
 ## Platform Adaptation
 

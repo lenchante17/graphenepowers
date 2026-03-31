@@ -2,6 +2,12 @@
 
 Use these as baseline packet shapes for clean-context subagent handoff.
 
+Related templates:
+
+- `docs/graphenepowers/templates/design-contract.md`
+- `docs/graphenepowers/templates/review-packet.md`
+- `docs/graphenepowers/templates/retrospective-summary.md`
+
 Canonical task-event schema:
 
 - `docs/graphenepowers/schemas/task-event.schema.yaml`

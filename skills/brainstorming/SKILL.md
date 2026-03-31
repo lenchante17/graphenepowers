@@ -68,23 +68,65 @@ The separation is conceptual and operational:
 
 By default, keep both phases in the same spec document. Split them into separate documents only for unusually large or regulated `Feature` work.
 
-## Checklist
+## Operating Modes
 
-You MUST create a task for each of these items and complete them in order:
+Choose one mode after reviewing the pre-brainstorm brief.
+
+### Exploratory
+
+Use when one or more of these are still open:
+
+- architecture choice
+- locked interfaces
+- locked invariants
+- sequencing with meaningful cost or risk differences
+- user-visible behavior that still needs alternatives and trade-offs
+
+### Contract-Confirmation
+
+Use when the design already exists or is mostly agreed and the remaining work is to:
+
+- confirm the inputs are still current
+- surface only blocking questions
+- lock the design contract
+- hand a stable contract to planning
+
+Switch from `contract-confirmation` to `exploratory` immediately if confirmation reveals unstable interfaces, unresolved invariants, or competing architectural options that materially change the plan.
+
+## Checklists
+
+Choose the checklist that matches the selected mode.
+
+### Exploratory Checklist
 
 1. **Confirm entry condition** — this is `Feature` work or design confidence is low
 2. **Review the pre-brainstorm brief** — make sure the relevant precedents, assumptions, latest knowledge, and unknowns are explicit before asking design questions
 3. **Offer visual companion** (if topic will involve visual questions) — this is its own message, not combined with a clarifying question. See the Visual Companion section below.
-4. **Ask clarifying questions** — one at a time, understand purpose/constraints/success criteria
+4. **Ask clarifying questions** — one at a time, understand purpose, constraints, and success criteria
 5. **Propose 2-3 approaches** — with trade-offs and your recommendation
 6. **Present design** — in sections scaled to their complexity, get user approval after each section
-7. **Write design doc** — save to `docs/graphenepowers/specs/YYYY-MM-DD-<topic>-design.md` and commit
+7. **Write design doc** — save to `docs/graphenepowers/specs/YYYY-MM-DD-<topic>-design.md`
 8. **Spec review loop** — dispatch spec-document-reviewer subagent with precisely crafted review context (never your session history); fix issues and re-dispatch until approved (max 3 iterations, then surface to human)
 9. **User reviews written spec** — ask user to review the spec file before proceeding
 10. **Lock design contract** — confirm locked interfaces, invariants, autonomy boundary, exception gates, and handoff evidence
 11. **Transition to implementation** — invoke `graphenepowers:writing-plans`
 
+### Contract-Confirmation Checklist
+
+1. **Confirm entry condition** — this is `Feature` work and the design appears mostly stable already
+2. **Review the pre-brainstorm brief and existing design inputs** — identify what is already locked versus what still needs confirmation
+3. **Offer visual companion** only if upcoming questions truly need visual treatment
+4. **Ask only blocking questions** — keep questions scoped to assumptions, interfaces, invariants, dependencies, or approval boundaries
+5. **Present the contract summary** — show what will be treated as locked, what remains open, and what would trigger a return to exploratory mode
+6. **Write or update the design doc** — save to `docs/graphenepowers/specs/YYYY-MM-DD-<topic>-design.md`
+7. **Spec review loop** — review the contract and any deltas with tightly scoped context
+8. **User reviews written contract/spec** — ask for explicit approval before planning
+9. **Lock design contract** — confirm the final contract is stable enough for planning
+10. **Transition to implementation** — invoke `graphenepowers:writing-plans`
+
 ## Process Flow
+
+The diagram below shows the default exploratory path. In `contract-confirmation` mode, replace the alternatives loop with a shorter path: review current inputs -> ask only blocking questions -> present contract summary -> write or update the spec -> review -> user approval -> lock contract.
 
 ```dot
 digraph brainstorming {
@@ -130,6 +172,7 @@ digraph brainstorming {
 - Start from the pre-brainstorm research/context brief rather than from raw intuition.
 - Review the brief before ideation and make sure the relevant precedents, latest knowledge, assumptions, and unknowns are visible to the user.
 - Use the brief to improve question quality. Ask questions after the frame is explicit, not before.
+- In `contract-confirmation` mode, start by testing the current design inputs against the brief and ask only the questions that block contract locking.
 - If the brief reveals stale external knowledge, missing domain context, or ungrounded assumptions, pause brainstorming and strengthen the brief first.
 - Before asking detailed questions, assess scope: if the request describes multiple independent subsystems (e.g., "build a platform with chat, file storage, billing, and analytics"), flag this immediately. Don't spend questions refining details of a project that needs to be decomposed first.
 - If the project is too large for a single spec, help the user decompose into sub-projects: what are the independent pieces, how do they relate, what order should they be built? Then brainstorm the first sub-project through the normal design flow. Each sub-project gets its own spec → plan → implementation cycle.
@@ -143,6 +186,7 @@ digraph brainstorming {
 - Propose 2-3 different approaches with trade-offs
 - Present options conversationally with your recommendation and reasoning
 - Lead with your recommended option and explain why
+- Skip this step in `contract-confirmation` mode unless the supposedly stable design turns out to have real competing options that would change the contract
 
 **Presenting the design:**
 
@@ -151,6 +195,7 @@ digraph brainstorming {
 - Ask after each section whether it looks right so far
 - Cover: architecture, components, data flow, error handling, testing
 - Be ready to go back and clarify if something doesn't make sense
+- In `contract-confirmation` mode, present the contract summary and unresolved risks rather than forcing a full alternatives narrative
 
 **Design for isolation and clarity:**
 
@@ -172,6 +217,7 @@ digraph brainstorming {
 - Write the validated design (spec) to `docs/graphenepowers/specs/YYYY-MM-DD-<topic>-design.md`
   - (User preferences for spec location override this default)
 - Record the pre-brainstorm research/context brief in the spec when it materially shaped the design, especially the implicit assumptions, external constraints, and mental models the plan will rely on
+- Use `docs/graphenepowers/templates/design-contract.md` for the contract section or linked companion document
 - Prefer a spec shape like:
   - context brief
   - design exploration
@@ -189,6 +235,8 @@ After writing the spec document:
 2. If Issues Found: fix, re-dispatch, repeat until Approved
 3. If loop exceeds 3 iterations, surface to human for guidance
 
+For `contract-confirmation` mode, the review may focus on contract deltas and gate boundaries instead of re-reviewing unchanged exploratory context.
+
 **User Review Gate:**
 After the spec review loop passes, ask the user to review the written spec before proceeding:
 
@@ -204,6 +252,7 @@ Before handing off to planning for `Feature`, write or confirm the design contra
 - autonomy boundary
 - exception gates
 - handoff evidence the human expects
+- human-gate triggers that must pause execution
 
 If design is already stable enough when you enter `brainstorming`, do not force unnecessary exploratory churn. Confirm the design inputs, lock the contract, and move on.
 

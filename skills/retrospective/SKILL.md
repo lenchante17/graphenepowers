@@ -19,6 +19,8 @@ Support asset for retrospective specialists:
 
 - `retrospective/subagents/retrospective-subagent/AGENTS.md`
 - `retrospective/process.md`
+- `docs/graphenepowers/templates/retrospective-summary.md`
+- `docs/graphenepowers/templates/process-change-intake.md`
 
 ## When to Run
 
@@ -91,6 +93,6 @@ Read these files in order:
 - `graphenepowers:code-review`
 
 **Feeds into:**
-- the external skill-management workflow when a process change is accepted
+- `docs/graphenepowers/templates/process-change-intake.md` and then the external skill-management workflow or repo-local source-of-truth update work item when a process change is accepted
 
 Retrospective should be handled by a clean-context specialist agent that was not the primary planner, implementer, or reviewer for the same work item.

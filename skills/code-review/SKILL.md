@@ -17,6 +17,7 @@ Support asset for clean-context reviewers:
 
 - `code-review/subagents/review-subagent/AGENTS.md`
 - `code-review/review-policy.md`
+- `docs/graphenepowers/templates/review-packet.md`
 
 Workflow assets in this skill:
 
@@ -57,6 +58,8 @@ Read these files before choosing a review mode:
 
 1. `code-review/review-policy.md`
 2. the specific prompt in `code-review/review-modes/`
+
+Prepare a bounded packet that follows `docs/graphenepowers/templates/review-packet.md` before dispatching a clean-context reviewer.
 
 ## Quick Reference
 
@@ -102,3 +105,4 @@ Read these files before choosing a review mode:
 - `code-review/review-modes/preflight-spec-reviewer.md`
 - `code-review/review-modes/spec-delta-reviewer.md`
 - `code-review/review-modes/quality-reviewer.md`
+- `docs/graphenepowers/templates/review-packet.md`

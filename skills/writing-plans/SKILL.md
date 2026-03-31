@@ -23,10 +23,14 @@ This skill has two operating modes:
 - Progress record: `docs/graphenepowers/plans/YYYY-MM-DD-<topic>-plan-progress.md`
 - Templates: `docs/graphenepowers/templates/execution-plan.md`, `docs/graphenepowers/templates/plan-progress.md`
 - Packet templates: `docs/graphenepowers/templates/subagent-packets.md`
+- Design contract template: `docs/graphenepowers/templates/design-contract.md`
+- Reclassification record template: `docs/graphenepowers/templates/reclassification-record.md`
+- Human gate matrix: `docs/graphenepowers/human-gates.md`
 - Schema: `docs/graphenepowers/schemas/plan-progress.schema.yaml`
 - Task-event schema: `docs/graphenepowers/schemas/task-event.schema.yaml`
-- Tools: `docs/graphenepowers/tools/validate-plan-progress.cjs`, `docs/graphenepowers/tools/render-plan-progress.cjs`
+- Tools: `docs/graphenepowers/tools/validate-plan-progress.cjs`, `docs/graphenepowers/tools/render-plan-progress.cjs`, `docs/graphenepowers/tools/export-plan-progress-graph-model.cjs`, `clairvoyance serve`
 - Operations guide: `docs/graphenepowers/plan-progress-operations.md`
+- Plans workspace: `docs/graphenepowers/plans/README.md`
 - Lightweight example: `docs/graphenepowers/examples/small-task-lightweight/`
 - Feature example: `docs/graphenepowers/examples/feature-windowed/`
 - Planning review prompt: `writing-plans/review/plan-document-reviewer-prompt.md`
@@ -39,6 +43,8 @@ This skill has two operating modes:
 - classification summary from `graphenepowers:using-graphenepowers`
 - Current project structure
 - For `Feature`, an approved design contract or equivalent locked design inputs
+
+If the work reached planning through `contract-confirmation`, the design input may be concise, but it still needs exact interfaces, invariants, autonomy boundaries, and gate triggers.
 
 If classification says `Feature` and no approved design exists, stop and use `graphenepowers:brainstorming`.
 
@@ -60,6 +66,9 @@ Keep these concrete assets nearby:
 - `docs/graphenepowers/templates/execution-plan.md`
 - `docs/graphenepowers/templates/plan-progress.md`
 - `docs/graphenepowers/templates/subagent-packets.md`
+- `docs/graphenepowers/templates/design-contract.md`
+- `docs/graphenepowers/templates/reclassification-record.md`
+- `docs/graphenepowers/human-gates.md`
 
 ## Quick Reference
 
@@ -72,6 +81,9 @@ Keep these concrete assets nearby:
 | Readable handoff | `acceptance`, `artifacts`, `review_state` |
 | Safe execution | concrete verification per task |
 | Plan lint | run `writing-plans/scripts/check-plan-placeholders.cjs <plan-doc>` before handoff |
+| Browser preview | run `clairvoyance serve docs/graphenepowers/plans` and open the projected `*-plan-progress.html` page |
+| Graph projector input | run `docs/graphenepowers/tools/export-plan-progress-graph-model.cjs <plan-progress.md>` |
+| Midstream route change | add `docs/graphenepowers/templates/reclassification-record.md` and update affected artifacts before resuming |
 
 ## Common Mistakes
 
@@ -90,6 +102,10 @@ Keep these concrete assets nearby:
 **Plan without verification**
 - **Problem:** execution can claim success without evidence
 - **Fix:** every task gets a concrete verification command
+
+**Implicit human gates**
+- **Problem:** implementers do not know which risks require a pause versus a status note
+- **Fix:** reference `docs/graphenepowers/human-gates.md` and make contract or task-level gates explicit where they matter
 
 **Treating kanban as a second source of truth**
 - **Problem:** task status drifts between YAML and Markdown

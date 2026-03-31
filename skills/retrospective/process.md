@@ -73,7 +73,18 @@ Write short, falsifiable change notes. Record `hypothesis` and `reproducibility`
 - record `hypothesis` and `reproducibility` before proposing a process change
 - only propose a skill change immediately when one incident reveals a structural flaw, not just a noisy run
 
-## Step 5: Present Completion Options
+## Step 5: Route Accepted Process Changes
+
+If retrospective accepts a process change:
+
+1. create `docs/graphenepowers/templates/process-change-intake.md`
+2. name the exact source-of-truth files that should change
+3. define the verification or walkthrough that will prove the new rule is wired in
+4. hand the intake to the external skill-management workflow or open a repo-local follow-up work item
+
+Do not leave accepted workflow changes as free-form notes in a retrospective summary.
+
+## Step 6: Present Completion Options
 
 If this is a git work item, present exactly these options:
 

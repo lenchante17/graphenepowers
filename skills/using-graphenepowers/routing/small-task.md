@@ -24,4 +24,5 @@ Request
 - use `graphenepowers:writing-plans` in `lightweight` mode
 - keep the task graph explicit even when the plan stays short
 - if the classification used a hard override, run preflight review before execution
-- if scope rises during rolling re-plan, return to `routing/triage.md`
+- if scope rises or confidence drops during rolling re-plan, return to `routing/triage.md`
+- if the route changes after execution has started, record it with `docs/graphenepowers/templates/reclassification-record.md` before continuing

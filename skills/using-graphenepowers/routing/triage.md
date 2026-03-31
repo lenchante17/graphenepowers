@@ -5,6 +5,8 @@ This is the internal classification module used by `graphenepowers:using-graphen
 Support asset for `Micro` work:
 
 - `docs/graphenepowers/micro-fast-path.md`
+- `docs/graphenepowers/human-gates.md`
+- `docs/graphenepowers/templates/reclassification-record.md`
 
 ## Overview
 
@@ -59,7 +61,7 @@ These rules beat the total:
 - `Feature` -> `routing/feature.md`
 - `confidence = low` -> ask human or move one level up
 
-On rolling re-plan, re-run this classification for affected follow-up work.
+On rolling re-plan, re-run this classification for affected follow-up work. If the new route raises grade or changes the feature mode, consult `docs/graphenepowers/human-gates.md` and record it with `docs/graphenepowers/templates/reclassification-record.md`.
 
 ## Quick Reference
 

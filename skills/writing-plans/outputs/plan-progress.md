@@ -24,14 +24,18 @@ Seed the machine record once, then let execution own updates.
 - task `review_state`
 - task `blocker_ids`
 - empty `blockers`
-- empty `events`
+- empty `events` seeded for workflow events such as route reclassification
 
 `plan-progress.md` is the state record for `graphenepowers:executing-plans`, not a second plan written from scratch.
+
+## Route Reclassification
+
+If the route changes after planning starts, append a structured event under `events` using `docs/graphenepowers/templates/reclassification-record.md`. Do not silently overwrite the previous grade or confidence without leaving a record of why the route changed and who approved it.
 
 ## Minimum Shape
 
 ````markdown
-# plan-progress.md
+# `plan-progress.md`
 
 ## Machine Record
 ```yaml
