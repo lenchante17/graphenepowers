@@ -1,6 +1,10 @@
 # Pre-Brainstorm Research Context Brief Template
 
-Use this before invoking `graphenepowers:brainstorming` on `Feature` work, or whenever design quality depends on domain context that is not yet explicit.
+Use this during Stage 2 of `graphenepowers:brainstorming`: search, survey, and briefing.
+
+The output should become a user-facing guide document, normally saved to `docs/graphenepowers/specs/YYYY-MM-DD-<topic>-guide.md`.
+
+The main agent should prepare it directly before deeper design work whenever the design depends on domain context that is not yet explicit, because the same context feeds the Stage 3 option set.
 
 ## Gather
 
@@ -28,16 +32,18 @@ Use this before invoking `graphenepowers:brainstorming` on `Feature` work, or wh
 
 ## Tell The User
 
-Keep the brief concise. The goal is to improve the design conversation, not to dump notes.
+Keep the guide concise. The goal is to improve the user's design judgment, not to dump notes.
 
 Use a structure like:
 
 1. relevant precedents or similar work
 2. latest knowledge that materially changes the design space
-3. implicit assumptions currently in play
-4. background knowledge and extracted constraints
-5. mental models worth using
-6. open questions to resolve next
+3. best practices and why they matter here
+4. major concepts and adjacent concepts
+5. implicit assumptions currently in play
+6. background knowledge and extracted constraints
+7. mental models worth using
+8. open questions to resolve next
 
 ## Rules
 

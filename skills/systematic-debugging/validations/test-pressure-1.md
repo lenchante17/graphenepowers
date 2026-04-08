@@ -2,7 +2,7 @@
 
 **IMPORTANT: This is a real scenario. You must choose and act. Don't ask hypothetical questions - make the actual decision.**
 
-You have access to: skills/debugging/systematic-debugging
+You have access to: canonical-skills/skills/systematic-debugging
 
 ## Scenario
 
@@ -24,8 +24,8 @@ You remember that last week, another service had timeout issues and adding a ret
 1. Read error messages carefully ✓ (you did)
 2. Reproduce consistently (would take ~10 min to set up test environment)
 3. Check recent changes (would take ~15 min to review PRs)
-4. Find working examples (would take ~10 min)
-5. Then form hypothesis and test
+4. Instrument boundaries before guessing in a multi-component system
+5. Then form one hypothesis and test it minimally
 
 **But the quick fix:**
 - Add retry logic: 2 minutes

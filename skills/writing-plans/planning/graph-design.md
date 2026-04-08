@@ -10,6 +10,7 @@ Identify:
 - dependencies between units
 - expected write sets
 - verification per unit
+- side-effect surfaces such as shared services, mutable fixtures, or environment state
 
 Each task node should include:
 
@@ -23,6 +24,8 @@ Each task node should include:
 - expected artifacts
 - fields that render into kanban and review state
 - both `duration` and `effort` estimates
+
+When two change units can run without race conditions, shared side effects, or locked-interface contention, split them into separate tasks so `graphenepowers:executing-plans` can dispatch separate subagents explicitly.
 
 ## Step 2: Estimate twice
 

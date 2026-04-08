@@ -55,6 +55,7 @@ Close execution only after review state and final tracking views are up to date.
 - finalize `plan-progress.md` after the review result is reflected
 - summarize what passed, what remains open, and what changed from plan
 - hand off to `graphenepowers:retrospective`
+- for `Feature`, expect close-out to produce project-root `retrospective.md`
 
 ### Exit Criteria
 

@@ -38,9 +38,12 @@ execution_packet:
   task_id: T3
   task_name: Implement widget parser
   window_id: W1
+  context_mode: lean
   depends_on_satisfied: [T1, T2]
   write_set:
     - src/widget/parser.ts
+    - tests/widget/parser.test.ts
+  pattern_refs:
     - tests/widget/parser.test.ts
   acceptance:
     - parser accepts v2 widgets
@@ -53,7 +56,23 @@ execution_packet:
       - WidgetParser.parse(input)
     locked_invariants:
       - parser errors stay typed
+  service_hygiene: null
   known_blockers: []
+```
+
+Use `context_mode: lean` only when the task is standalone and the packet already contains enough local context. Use `context_mode: full` when the worker needs broader task, window, or contract context to avoid drift.
+
+When a task starts long-lived processes or uses contested environment state, replace `service_hygiene: null` with explicit startup and cleanup instructions.
+
+```yaml
+service_hygiene:
+  cleanup_before:
+    - pkill -f 'node.*server.js' 2>/dev/null || true
+  readiness_checks:
+    - lsof -i :3001 && exit 1 || echo 'Port available'
+  cleanup_after:
+    - pkill -f 'node.*server.js' 2>/dev/null || true
+    - pgrep -f 'node.*server.js' && exit 1 || echo 'Cleanup verified'
 ```
 
 ## Review Packet

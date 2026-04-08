@@ -84,7 +84,28 @@ If retrospective accepts a process change:
 
 Do not leave accepted workflow changes as free-form notes in a retrospective summary.
 
-## Step 6: Present Completion Options
+## Step 6: Write `retrospective.md`
+
+For `Feature`, write or update `retrospective.md` in the project root.
+
+- keep it to roughly one A4 page
+- make it human-readable without replaying the whole execution log
+- summarize whether the plan was adequate before discussing process changes
+- call out the highest-signal pain points only
+- name concrete follow-up changes only when evidence supports them
+
+Recommended structure:
+
+1. work item and grade
+2. plan adequacy
+3. major pain points and deviations
+4. what held up well
+5. process decision
+6. open follow-ups
+
+For `Small Task`, write the same file only when a lightweight retrospective still surfaced a meaningful lesson worth preserving.
+
+## Step 7: Present Completion Options
 
 If this is a git work item, present exactly these options:
 

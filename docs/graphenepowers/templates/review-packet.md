@@ -24,6 +24,15 @@ review_packet:
       - npm test -- widget/parser
     evidence:
       - parser tests pass on the updated window
+  output_contract:
+    audience: human-review gate
+    max_length: roughly one A4 page
+    include:
+      - concise scope or plan summary
+      - critical path or parallel lanes when relevant
+      - main risks or gates
+      - findings
+      - verdict
   focused_questions:
     - does the diff preserve locked parser error invariants?
 ```
@@ -32,5 +41,6 @@ review_packet:
 
 - include only the artifacts the selected review mode needs
 - prefer task cards and contract excerpts over free-form summaries
+- if the review is driving a human gate, make the reviewer output self-contained enough that the human can review the brief without replaying the full artifact bundle
 - if review scope changes, revise the packet instead of sending raw session history
 - if a finding threatens a locked interface or invariant, route back through the orchestrator or human gate

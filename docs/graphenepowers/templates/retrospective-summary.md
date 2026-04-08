@@ -2,11 +2,19 @@
 
 Use this summary when closing work or deciding whether the process itself should change.
 
-## Outcome
+For `Feature`, write the final version to project-root `retrospective.md`. Keep the complete document to roughly one A4 page.
+
+## Work Item
 
 - work item:
 - grade / planning mode:
 - close-out status:
+
+## Plan Adequacy
+
+- was the original plan usable:
+- where the plan held:
+- where the plan broke down:
 
 ## Evidence Loaded
 
@@ -16,7 +24,7 @@ Use this summary when closing work or deciding whether the process itself should
 - verification evidence:
 - result packets:
 
-## Deviations
+## Major Pain Points And Deviations
 
 - effort deviation:
 - duration deviation:
@@ -28,6 +36,11 @@ Use this summary when closing work or deciding whether the process itself should
 - likely cause:
 - confidence in that cause:
 - repeated or isolated:
+
+## What Held Up Well
+
+- strongest part of the plan or workflow:
+- strongest part of execution or review:
 
 ## Process Decision
 
@@ -41,3 +54,4 @@ Use this summary when closing work or deciding whether the process itself should
 
 - if accepted, create `docs/graphenepowers/templates/process-change-intake.md`
 - if rejected, record why no source-of-truth change should be made
+- open follow-up work:

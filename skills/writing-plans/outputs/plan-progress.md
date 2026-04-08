@@ -1,6 +1,15 @@
-# `plan-progress.md`
+# Plan Progress
 
 Seed the machine record once, then let execution own updates.
+
+Use a human-facing title like `Plan Progress` for the document heading. Keep the filename as `plan-progress.md`, but do not reuse the literal filename as the first `#` heading because HTML projections use that heading as the page title.
+
+Prefer a human-first document order:
+
+1. human view sections
+2. `## Machine Record`
+
+The YAML block is still the source of truth even when it appears later in the document.
 
 ## Required Seed Fields
 
@@ -35,7 +44,47 @@ If the route changes after planning starts, append a structured event under `eve
 ## Minimum Shape
 
 ````markdown
-# `plan-progress.md`
+# Plan Progress
+
+## Human View Summary
+| Focus | Value |
+|-------|-------|
+| Grade | `Small Task` |
+| Planning Mode | `lightweight` |
+| Confidence | `medium` |
+| Estimated Duration | `2.5h` |
+| Estimated Effort | `3.5h` |
+
+### Execution Snapshot
+| ID | Task | Status | Review | Owner |
+|----|------|--------|--------|-------|
+
+### Dependencies And Estimates
+| ID | Depends On | Duration E +/- sigma | Effort E +/- sigma |
+|----|------------|-----------------------|--------------------|
+
+## Human View Graph Summary
+| Focus | Value |
+|-------|-------|
+| Critical Path | `T1 -> T3` |
+| Ready Parallel Lanes | `T1` |
+
+### Dependency Levels
+| Level | Tasks |
+|-------|-------|
+| 0 | `T1` |
+| 1 | `T2` |
+| 2 | `T3` |
+
+## Human View Kanban
+| Status | Tasks |
+|--------|-------|
+| Ready | `T1 Example task` |
+
+## Human View Review Queue
+| Review Item | State |
+|-------------|-------|
+| `T1 Quality Review` | `not needed` |
 
 ## Machine Record
 ```yaml
@@ -80,20 +129,6 @@ tasks:
 blockers: []
 events: []
 ```
-
-## Human View Summary
-| ID | Task | Depends On | Duration E +/- sigma | Effort E +/- sigma | Status | Review | Owner |
-|----|------|------------|-----------------------|--------------------|--------|--------|-------|
-
-## Human View Graph Summary
-- critical path: `T1 -> T3`
-- ready parallel lanes: `T1`
-
-## Human View Kanban
-### Ready
-- `T1 Example task`
-  - owner: `unassigned`
-  - acceptance: behavior matches the approved requirement
 ````
 
 ## Feature Additions

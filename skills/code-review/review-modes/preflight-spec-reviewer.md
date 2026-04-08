@@ -4,6 +4,8 @@ Use this template when dispatching a pre-execution spec reviewer.
 
 **Purpose:** catch bad plans before implementation burns time.
 
+**Human gate output:** produce a self-contained preflight brief sized to roughly one A4 page so a human can review the plan without re-reading the raw artifacts unless they choose to.
+
 ## Inputs
 
 - `{SPEC_REFERENCE}` - approved design/spec
@@ -34,6 +36,9 @@ Check:
 
 Output format:
 
+### Plan Summary
+[Concise summary of goal, execution shape, critical path, parallel-safe lanes, and major gates or risks]
+
 ### Findings
 #### Critical
 [Missing gates, broken sequencing, wrong grade, unsafe omissions]
@@ -47,4 +52,6 @@ Output format:
 ### Assessment
 **Approved to execute?** [Yes/No/With changes]
 **Return path:** [writing-plans / human gate / execute]
+
+Keep the full response to roughly one A4 page. The summary and findings should be self-contained enough for human review.
 ```

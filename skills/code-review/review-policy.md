@@ -25,6 +25,7 @@ Reviewers should work from bounded artifacts, not full session history.
 - never pass session history when scoped artifacts will do
 - if the reviewer needs more context, expand the packet instead of falling back to session history
 - prefer task cards over ad-hoc summaries when task cards contain the needed scope and evidence
+- when review drives a human gate, make the returned review self-contained enough that the human can review the brief without replaying the full artifact bundle
 
 ## Review State Discipline
 

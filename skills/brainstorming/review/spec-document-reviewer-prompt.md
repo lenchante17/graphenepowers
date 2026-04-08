@@ -36,7 +36,17 @@ Task tool (general-purpose):
 
     ## Output Format
 
-    ## Spec Review
+    Return one self-contained approval brief sized to roughly one A4 page.
+    The human should be able to read your summary and decide whether to approve
+    without replaying the entire review process unless they want more detail.
+
+    ## Spec Summary
+
+    - concept:
+    - high-level structure:
+    - main planning risks or gates:
+
+    ## Review Findings
 
     **Status:** Approved | Issues Found
 
@@ -45,6 +55,11 @@ Task tool (general-purpose):
 
     **Recommendations (advisory, do not block approval):**
     - [suggestions for improvement]
+
+    ## Approval Recommendation
+
+    - ready for planning: Yes | No | With changes
+    - next action for the human:
 ```
 
-**Reviewer returns:** Status, Issues (if any), Recommendations
+**Reviewer returns:** self-contained summary, findings, and approval recommendation

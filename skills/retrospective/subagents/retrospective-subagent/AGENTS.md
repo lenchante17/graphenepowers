@@ -91,6 +91,8 @@ Provide output in this order:
 4. `Recommended Rule Changes`
 5. `Open Questions`
 
+When the orchestrator is closing a `Feature`, make the output concise enough to become project-root `retrospective.md` with minimal rewriting. Target roughly one A4 page and include explicit commentary on plan adequacy and concrete pain points.
+
 ## Feature-Specific Rules
 
 For `Feature` work in windowed mode:

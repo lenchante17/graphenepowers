@@ -8,7 +8,7 @@ Force design clarity before implementation and keep execution windowed once the 
 
 ## Mode Selection
 
-Choose the feature mode after the context brief is ready.
+Choose the initial feature mode before brainstorming. If the Stage 2 research changes confidence, switch modes during brainstorming.
 
 ### Exploratory Feature
 
@@ -19,10 +19,7 @@ Request
 -> using-graphenepowers
 -> routing/triage.md
 -> Feature
--> research similar work and latest knowledge
--> prepare context brief
--> graphenepowers:brainstorming (exploratory)
--> lock design contract
+-> graphenepowers:brainstorming (exploratory; main agent owns Stage 2 search/survey/briefing)
 -> graphenepowers:writing-plans (windowed)
 -> graphenepowers:code-review (Preflight Spec Review)
 -> graphenepowers:executing-plans
@@ -39,10 +36,7 @@ Request
 -> using-graphenepowers
 -> routing/triage.md
 -> Feature
--> research similar work and latest knowledge
--> prepare context brief
--> graphenepowers:brainstorming (contract-confirmation)
--> lock design contract
+-> graphenepowers:brainstorming (contract-confirmation; main agent owns Stage 2 search/survey/briefing)
 -> graphenepowers:writing-plans (windowed)
 -> graphenepowers:code-review (Preflight Spec Review)
 -> graphenepowers:executing-plans
@@ -53,6 +47,7 @@ Request
 ## Rules
 
 - do not start implementation before design approval
+- keep Stage 2 research and Stage 3 option generation with the same main agent so later design choices can reuse the gathered context
 - keep the design contract stable before planning
 - use `windowed` planning rather than fully detailing the entire feature up front
 - prefer re-windowing over whole-plan rewrite when the contract still holds

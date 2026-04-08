@@ -39,7 +39,12 @@ Start only work that is actually runnable.
 
 - select tasks whose `depends_on` set is fully satisfied
 - dispatch only tasks with disjoint write sets
+- when two or more ready tasks are safe to run in parallel, prefer separate subagents over unnecessary serialization
+- treat work as parallel-safe only when write sets are disjoint and shared side effects are either absent or explicitly contained
+- serialize or isolate work when tasks touch the same locked interface, service lifecycle, mutable fixture, or environment state even if file paths differ
 - send clean-context execution packets to workers when using subagents
+- choose `lean` context packets for standalone pattern-based tasks and fuller packets for dependency-heavy or architecture-sensitive tasks
+- include explicit service hygiene instructions when a task starts long-lived processes, test servers, databases, or ports
 - announce and use `graphenepowers:test-driven-development` before any production-code task
 - record ownership before execution starts
 - move selected cards from `ready` to `in_progress`
@@ -48,6 +53,7 @@ Start only work that is actually runnable.
 
 - each running task has one owner
 - overlapping write sets are not active in parallel
+- shared side effects are either isolated or kept out of parallel execution
 - every dispatched task has acceptance and verification context
 
 ## `track`

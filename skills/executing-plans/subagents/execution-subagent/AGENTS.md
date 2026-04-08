@@ -75,12 +75,15 @@ The orchestrator should provide, at minimum:
 - `task_id`
 - task name
 - current window id
+- `context_mode`: `lean` or `full`
 - owned `write_set`
 - relevant dependency status
 - acceptance criteria
 - verification commands
 - design contract excerpts, when relevant
 - blocker ids already known
+
+For `lean` packets, the orchestrator should also provide the exact pattern reference or local example the worker should follow. Do not expand a `lean` packet into plan archaeology unless the packet is missing required facts.
 
 ## Required Output Packet
 
@@ -107,6 +110,16 @@ Before emitting the final packet:
 - verify the changed files stayed inside the assigned ownership
 - check whether verification evidence supports the claimed status
 - record remaining doubts in `notes` instead of hiding them in a confident summary
+
+## Service Hygiene For E2E Or Long-Lived Processes
+
+If the assigned task starts services, databases, browsers, queues, or anything that can persist after the task:
+
+- follow the packet's cleanup contract before starting any new process
+- clear stale matching processes first when instructed
+- verify ports, sockets, or lock files are actually free before reuse
+- stop the process you started before reporting completion unless the packet explicitly says to leave it running
+- report cleanup evidence together with test evidence so later workers do not inherit hidden side effects
 
 ## Blocker Rules
 
